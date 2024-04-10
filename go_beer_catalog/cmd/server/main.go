@@ -1,15 +1,27 @@
 package main
 
 import (
+	"github.com/joho/godotenv"
+	"google.golang.org/grpc"
 	"log"
+	"main/cmd/db"
 	pb "main/pkg/api"
 	"main/pkg/catalog"
 	"net"
-
-	"google.golang.org/grpc"
 )
 
+func init() {
+	if err := godotenv.Load(); err != nil {
+		log.Fatal("No .env file found")
+	}
+}
+
 func main() {
+	initDb()
+	initServer()
+}
+
+func initServer() {
 	s := grpc.NewServer()
 
 	pb.RegisterCatalogServer(s, &catalog.Server{})
@@ -21,5 +33,12 @@ func main() {
 
 	if err := s.Serve(l); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func initDb() {
+	_, err := db.GetDB()
+	if err != nil {
+		return
 	}
 }
