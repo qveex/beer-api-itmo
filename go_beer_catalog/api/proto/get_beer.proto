@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package get_beer;
+
+import "api/proto/beer.proto";
+
+message GetBeerRequest {
+  int64 beerId = 1;
+}
+
+message GetBeerResponse {
+  optional Beer beer = 1;
+}
