@@ -4,7 +4,6 @@ import (
 	"context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	db "main/cmd/db"
 	pb "main/pkg/api"
 	"slices"
 )
@@ -22,11 +21,12 @@ var beers = []*pb.Beer{
 
 // GetBeers ...
 func (s *Server) GetBeers(ctx context.Context, req *pb.GetBeersRequest) (*pb.GetBeersResponse, error) {
-	tmp, _ := db.GetDB()
+	/*tmp, _ := db.GetDB()
 	var tmpBeers []*pb.Beer
 	tmp.Find(&tmpBeers)
-	
-	return &pb.GetBeersResponse{Beers: tmpBeers}, nil
+
+	return &pb.GetBeersResponse{Beers: tmpBeers}, nil*/
+	return &pb.GetBeersResponse{Beers: beers}, nil
 }
 
 // GetBeer ...

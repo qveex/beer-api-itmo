@@ -17,7 +17,7 @@ func init() {
 }
 
 func main() {
-	initDb()
+	//initDb()
 	initServer()
 }
 
@@ -26,7 +26,7 @@ func initServer() {
 
 	pb.RegisterCatalogServer(s, &catalog.Server{})
 
-	l, err := net.Listen("tcp", ":8080")
+	l, err := net.Listen("tcp", ":8081")
 	if err != nil {
 		log.Fatal(err)
 	}
