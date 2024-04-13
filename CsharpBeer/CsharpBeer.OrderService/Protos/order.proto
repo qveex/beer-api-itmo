@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "Common.Protobuf";
+
+service OrderServiceGrpc {
+  rpc GetOrder (GetOrderRequest) returns (OrderDto);
+  rpc ListOrders (ListOrdersRequest) returns (ListOrdersResponse);
+  rpc CreateOrder (CreateOrderRequest) returns (OrderDto);
+  rpc UpdateOrder (UpdateOrderRequest) returns (OrderDto);
+  rpc DeleteOrder (DeleteOrderRequest) returns (google.protobuf.Empty);
+}
+
+message GetOrderRequest {
+  string token = 1;
+  int64 orderId = 2;
+}
+
+message ListOrdersRequest {
+  string token = 1;
+}
+
+message ListOrdersResponse {
+  repeated OrderDto orders = 1;
+}
+
+message CreateOrderRequest {
+  string token = 1;
+  OrderDto order = 2;
+}
+
+message UpdateOrderRequest {
+  OrderDto order = 1;
+}
+
+message DeleteOrderRequest {
+  string token = 1;
+  int64 orderId = 2;
+}
+
+message OrderDto {
+  int64 orderId = 1;
+  int64 userId = 2;
+  double total = 3;
+  repeated OrderItemDto items = 4;
+}
+
+message OrderItemDto {
+  int64 beerId = 1;
+  int32 quantity = 2;
+  double price = 3;
+}
