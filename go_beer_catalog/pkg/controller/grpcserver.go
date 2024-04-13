@@ -2,23 +2,14 @@ package controller
 
 import (
 	"context"
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"main/internal/domain"
 	pb "main/pkg/api"
-	"slices"
 )
 
 // Server ...
 type Server struct {
 	pb.UnimplementedCatalogServer
 	Service *domain.CatalogService
-}
-
-var beers = []*pb.Beer{
-	{BeerId: 1, Name: "Baltika 9", Brand: "Baltika", Type: pb.Type_STOUT, Deg: 9, Sweet: false},
-	{BeerId: 2, Name: "Baltika 8", Brand: "Baltika", Type: pb.Type_STOUT, Deg: 8, Sweet: false},
-	{BeerId: 3, Name: "Baltika 7", Brand: "Baltika", Type: pb.Type_STOUT, Deg: 7, Sweet: false},
 }
 
 // GetBeers ...
@@ -29,15 +20,8 @@ func (s *Server) GetBeers(ctx context.Context, req *pb.GetBeersRequest) (*pb.Get
 
 // GetBeer ...
 func (s *Server) GetBeer(ctx context.Context, req *pb.GetBeerRequest) (*pb.GetBeerResponse, error) {
-	beerIndex := slices.IndexFunc(beers, func(beer *pb.Beer) bool {
-		return req.BeerId == beer.BeerId
-	})
-
-	if beerIndex != -1 {
-		return &pb.GetBeerResponse{Beer: beers[beerIndex]}, nil
-	} else {
-		return nil, status.Error(codes.NotFound, "Beer not found")
-	}
+	result, err := s.Service.GetBeer(req.BeerId)
+	return &pb.GetBeerResponse{Beer: result}, err
 }
 
 // CreateBeer ...
@@ -48,39 +32,12 @@ func (s *Server) CreateBeer(ctx context.Context, req *pb.CreateBeerRequest) (*pb
 
 // UpdateBeer ...
 func (s *Server) UpdateBeer(ctx context.Context, req *pb.UpdateBeerRequest) (*pb.UpdateBeerResponse, error) {
-	found := false
-	for i := range beers {
-		if beers[i].BeerId == req.BeerId {
-			beers[i].Name = req.Beer.Name
-			beers[i].Brand = req.Beer.Brand
-			beers[i].Type = req.Beer.Type
-			beers[i].Deg = req.Beer.Deg
-			beers[i].Sweet = req.Beer.Sweet
-
-			found = true
-			break
-		}
-	}
-
-	if found == true {
-		return &pb.UpdateBeerResponse{}, nil
-	} else {
-		return nil, status.Error(codes.NotFound, "Beer not found")
-	}
+	result, err := s.Service.UpdateBeer(req.BeerId, req.Beer)
+	return &pb.UpdateBeerResponse{Beer: result}, err
 }
 
 // DeleteBeer ...
 func (s *Server) DeleteBeer(ctx context.Context, req *pb.DeleteBeerRequest) (*pb.DeleteBeerResponse, error) {
-
-	initSize := len(beers)
-	beers = slices.DeleteFunc(beers, func(beer *pb.Beer) bool {
-		return beer.BeerId == req.BeerId
-	})
-	newSize := len(beers)
-
-	if newSize != initSize {
-		return &pb.DeleteBeerResponse{}, nil
-	} else {
-		return nil, status.Error(codes.NotFound, "Beer not found")
-	}
+	result, err := s.Service.DeleteBeer(req.BeerId)
+	return &pb.DeleteBeerResponse{Beer: result}, err
 }

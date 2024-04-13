@@ -63,7 +63,9 @@ message UpdateBeerRequest {
     Beer beer = 2;
 }
 
-message UpdateBeerResponse {}
+message UpdateBeerResponse {
+    Beer beer = 1;
+}
 /**************** UPDATE BEER *******************/
 
 
@@ -73,7 +75,9 @@ message DeleteBeerRequest {
     int64 beerId = 1;
 }
 
-message DeleteBeerResponse {}
+message DeleteBeerResponse {
+    Beer beer = 1;
+}
 /**************** UPDATE BEER *******************/
 
 

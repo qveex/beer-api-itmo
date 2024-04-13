@@ -1,26 +1,18 @@
 package repository
 
 import (
-	"errors"
 	pb "main/pkg/api"
 )
 
 // CreateNewBeer TODO domain entity && id
 func (r *CatalogRepository) CreateNewBeer(beer *pb.Beer) (int64, error) {
+	var lastBeer *pb.Beer
+	r.db.Last(&lastBeer)
+	beer.BeerId = lastBeer.BeerId + 1 // костылек, нужна подвязка к орм
+
 	result := r.db.Create(&beer)
 
-	if result.Error == nil {
-		return -1, result.Error
-	}
-
-	var newBeer *pb.Beer
-	r.db.Take(&newBeer)
-
-	if newBeer == nil {
-		return -1, errors.New("beer not created")
-	}
-
-	return newBeer.BeerId, nil
+	return beer.BeerId, result.Error
 }
 
 func (r *CatalogRepository) GetAllBeers() ([]*pb.Beer, error) {
@@ -28,4 +20,39 @@ func (r *CatalogRepository) GetAllBeers() ([]*pb.Beer, error) {
 	r.db.Find(&beers)
 
 	return beers, nil
+}
+
+func (r *CatalogRepository) GetBeer(beerId int64) (*pb.Beer, error) {
+	var beer *pb.Beer
+	result := r.db.First(&beer, beerId)
+
+	return beer, result.Error
+}
+
+func (r *CatalogRepository) UpdateBeer(beerId int64, beer *pb.Beer) (*pb.Beer, error) {
+	var foundBeer *pb.Beer
+	result := r.db.First(&foundBeer, beerId)
+
+	if foundBeer == nil {
+		return nil, result.Error
+	}
+
+	foundBeer = beer
+	result = r.db.Save(foundBeer)
+
+	return beer, result.Error
+}
+
+func (r *CatalogRepository) DeleteBeer(beerId int64) (*pb.Beer, error) {
+
+	var beer *pb.Beer
+	result := r.db.First(&beer, beerId)
+
+	if beer == nil {
+		return nil, result.Error
+	}
+
+	result = r.db.Delete(beer, beerId)
+
+	return beer, result.Error
 }
