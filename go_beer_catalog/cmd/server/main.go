@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"log"
-	"main/cmd/db"
+	"main/internal/env"
+	pr "main/internal/pkg"
 	pb "main/pkg/api"
-	"main/pkg/catalog"
+	"main/pkg/controller"
 	"net"
 )
 
@@ -17,28 +19,33 @@ func init() {
 }
 
 func main() {
-	//initDb()
+	initDb()
 	initServer()
 }
 
 func initServer() {
+
+	port := fmt.Sprintf(":%s", env.GetEnv(serverPort, "8080"))
 	s := grpc.NewServer()
 
-	pb.RegisterCatalogServer(s, &catalog.Server{})
+	service := pr.Provider.GetCatalogService()
 
-	l, err := net.Listen("tcp", ":8081")
+	pb.RegisterCatalogServer(s, &controller.Server{Service: service})
+	l, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	log.Printf("Listening on port %s", port)
 	if err := s.Serve(l); err != nil {
 		log.Fatal(err)
 	}
 }
 
 func initDb() {
-	_, err := db.GetDB()
-	if err != nil {
-		return
-	}
+	_ = pr.Provider.GetDb()
 }
+
+const (
+	serverPort = "PORT"
+)

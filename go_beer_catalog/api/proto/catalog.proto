@@ -49,7 +49,9 @@ message CreateBeerRequest {
     Beer beer = 1;
 }
 
-message CreateBeerResponse {}
+message CreateBeerResponse {
+    int64 beerId = 1;
+}
 /**************** CREATE BEER *******************/
 
 

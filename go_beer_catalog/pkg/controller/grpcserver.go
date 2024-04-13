@@ -1,9 +1,10 @@
-package catalog
+package controller
 
 import (
 	"context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"main/internal/domain"
 	pb "main/pkg/api"
 	"slices"
 )
@@ -11,6 +12,7 @@ import (
 // Server ...
 type Server struct {
 	pb.UnimplementedCatalogServer
+	Service *domain.CatalogService
 }
 
 var beers = []*pb.Beer{
@@ -21,12 +23,8 @@ var beers = []*pb.Beer{
 
 // GetBeers ...
 func (s *Server) GetBeers(ctx context.Context, req *pb.GetBeersRequest) (*pb.GetBeersResponse, error) {
-	/*tmp, _ := db.GetDB()
-	var tmpBeers []*pb.Beer
-	tmp.Find(&tmpBeers)
-
-	return &pb.GetBeersResponse{Beers: tmpBeers}, nil*/
-	return &pb.GetBeersResponse{Beers: beers}, nil
+	result, err := s.Service.GetAllBeers()
+	return &pb.GetBeersResponse{Beers: result}, err
 }
 
 // GetBeer ...
@@ -44,8 +42,8 @@ func (s *Server) GetBeer(ctx context.Context, req *pb.GetBeerRequest) (*pb.GetBe
 
 // CreateBeer ...
 func (s *Server) CreateBeer(ctx context.Context, req *pb.CreateBeerRequest) (*pb.CreateBeerResponse, error) {
-	beers = append(beers, req.Beer)
-	return &pb.CreateBeerResponse{}, nil
+	result, err := s.Service.CreateNewBeer(req.Beer)
+	return &pb.CreateBeerResponse{BeerId: result}, err
 }
 
 // UpdateBeer ...
