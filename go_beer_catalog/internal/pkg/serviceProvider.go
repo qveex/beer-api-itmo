@@ -2,17 +2,26 @@ package pkg
 
 import (
 	"fmt"
+	grpcretry "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/retry"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/credentials/insecure"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"main/internal/domain"
 	"main/internal/env"
 	"main/internal/repository"
+	pb "main/pkg/api"
+	"time"
 )
 
 type ServiceProvider struct {
-	db      *gorm.DB
-	service *domain.CatalogService
-	repo    *repository.CatalogRepository
+	db             *gorm.DB
+	authClient     *pb.CatalogClient
+	catalogService *domain.CatalogService
+	catalogRepo    *repository.CatalogRepository
+	authService    *domain.AuthService
+	authRepo       *repository.AuthRepository
 }
 
 var Provider = &ServiceProvider{}
@@ -41,23 +50,70 @@ func (sp *ServiceProvider) GetDb() *gorm.DB {
 }
 
 func (sp *ServiceProvider) GetCatalogService() *domain.CatalogService {
-	if sp.service != nil {
-		return sp.service
+	if sp.catalogService != nil {
+		return sp.catalogService
 	}
 
-	sp.service = domain.NewCatalogService(sp.GetCatalogRepository())
+	sp.catalogService = domain.NewCatalogService(sp.GetCatalogRepository())
 
-	return sp.service
+	return sp.catalogService
 }
 
 func (sp ServiceProvider) GetCatalogRepository() *repository.CatalogRepository {
-	if sp.repo != nil {
-		return sp.repo
+	if sp.catalogRepo != nil {
+		return sp.catalogRepo
 	}
 
-	sp.repo = repository.NewCatalogRepository(sp.GetDb())
+	sp.catalogRepo = repository.NewCatalogRepository(sp.GetDb())
 
-	return sp.repo
+	return sp.catalogRepo
+}
+
+func (sp *ServiceProvider) GetAuthService() *domain.AuthService {
+	if sp.catalogService != nil {
+		return sp.authService
+	}
+
+	sp.authService = domain.NewAuthService(sp.GetAuthRepository())
+
+	return sp.authService
+}
+
+func (sp ServiceProvider) GetAuthRepository() *repository.AuthRepository {
+	if sp.authRepo != nil {
+		return sp.authRepo
+	}
+
+	sp.authRepo = repository.NewAuthRepository(sp.GetAuthClient())
+
+	return sp.authRepo
+}
+
+func (sp ServiceProvider) GetAuthClient() *pb.CatalogClient {
+	if sp.authClient != nil {
+		return sp.authClient
+	}
+
+	retryOpts := []grpcretry.CallOption{
+		grpcretry.WithCodes(codes.NotFound, codes.Aborted, codes.DeadlineExceeded),
+		grpcretry.WithMax(uint(3)),
+		grpcretry.WithPerRetryTimeout(time.Duration(5) * time.Second),
+	}
+
+	conn, err := grpc.NewClient(
+		":8081",
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithChainUnaryInterceptor(grpcretry.UnaryClientInterceptor(retryOpts...)),
+	)
+
+	if err != nil {
+		panic(err)
+	}
+
+	client := pb.NewCatalogClient(conn) // TODO Auth
+	sp.authClient = &client
+
+	return sp.authClient
 }
 
 const (
