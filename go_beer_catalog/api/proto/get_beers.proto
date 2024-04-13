@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package api;
+
+import "beer.proto";
+
+option go_package = ".";
+
+message GetBeersRequest {
+  optional int32 limit = 1;
+  optional string brand = 2;
+  optional Type type = 3;
+  optional int32 deg = 4;
+  optional bool sweet = 5;
+}
+
+message GetBeersResponse {
+  repeated Beer beers = 1;
+}

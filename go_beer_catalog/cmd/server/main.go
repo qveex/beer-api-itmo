@@ -14,7 +14,7 @@ import (
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("No .env file found")
+		log.Fatalf("No .env file found: %s", err.Error())
 	}
 }
 
@@ -43,7 +43,11 @@ func initServer() {
 }
 
 func initDb() {
-	_ = pr.Provider.GetDb()
+	db := pr.Provider.GetDb()
+	err := db.AutoMigrate(&pb.Beer{})
+	if err != nil {
+		panic(err)
+	}
 }
 
 const (

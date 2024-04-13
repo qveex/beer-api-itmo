@@ -1,6 +1,8 @@
 syntax = "proto3";
 
-package beer;
+package api;
+
+option go_package = ".";
 
 message Beer {
   int64 beerId = 1;

@@ -6,10 +6,11 @@ import "beer.proto";
 
 option go_package = ".";
 
-message GetBeerRequest {
+message UpdateBeerRequest {
   int64 beerId = 1;
+  Beer beer = 2;
 }
 
-message GetBeerResponse {
-  optional Beer beer = 1;
+message UpdateBeerResponse {
+  Beer beer = 1;
 }
