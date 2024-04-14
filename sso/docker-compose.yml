@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: auth
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  app:
+    build: .
+    depends_on:
+      - db
+    #    environment:
+    #      - DB_URL=postgresql://postgres:root@db:5432/auth?sslmode=disable
+    ports:
+      - "44044:44044"
+  #    command: ["./sso", "--config=config/config.yaml"]
+
+volumes:
+  postgres_data:
