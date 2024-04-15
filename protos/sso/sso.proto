@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package auth;
+package api.auth;
 
 option go_package = "krutov.sso.v1;ssov1";
 

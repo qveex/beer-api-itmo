@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package api.catalog;
+
+import "catalog/beer.proto";
+
+option go_package = ".";
+
+message GetBeerRequest {
+  int64 beerId = 1;
+}
+
+message GetBeerResponse {
+  optional Beer beer = 1;
+}

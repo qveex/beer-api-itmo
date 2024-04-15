@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package api.order;
+
+import "google/protobuf/empty.proto";
+import "order/order.proto";
+import "order/get_order.proto";
+import "order/list_order.proto";
+import "order/create_order.proto";
+import "order/update_order.proto";
+import "order/delete_order.proto";
+
+option csharp_namespace = "Common.Protobuf";
+
+service OrderServiceGrpc {
+  rpc GetOrder (GetOrderRequest) returns (OrderDto);
+  rpc ListOrders (ListOrdersRequest) returns (ListOrdersResponse);
+  rpc CreateOrder (CreateOrderRequest) returns (OrderDto);
+  rpc UpdateOrder (UpdateOrderRequest) returns (OrderDto);
+  rpc DeleteOrder (DeleteOrderRequest) returns (google.protobuf.Empty);
+}

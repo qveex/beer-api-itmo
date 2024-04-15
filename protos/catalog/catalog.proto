@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package api.catalog;
+
+import "catalog/get_beers.proto";
+import "catalog/get_beer.proto";
+import "catalog/create_beer.proto";
+import "catalog/update_beer.proto";
+import "catalog/delete_beer.proto";
+
+option go_package = ".";
+
+service Catalog {
+    rpc GetBeers(GetBeersRequest) returns (GetBeersResponse) {}
+    rpc GetBeer(GetBeerRequest) returns (GetBeerResponse) {}
+    rpc CreateBeer(CreateBeerRequest) returns (CreateBeerResponse) {}
+    rpc UpdateBeer(UpdateBeerRequest) returns (UpdateBeerResponse) {}
+    rpc DeleteBeer(DeleteBeerRequest) returns (DeleteBeerResponse) {}
+}

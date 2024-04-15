@@ -1,0 +1,11 @@
+﻿syntax = "proto3";
+
+package api.order;
+
+import "order/order.proto";
+
+option csharp_namespace = "Common.Protobuf";
+
+message UpdateOrderRequest {
+  OrderDto order = 1;
+}

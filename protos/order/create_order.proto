@@ -1,0 +1,21 @@
+﻿syntax = "proto3";
+
+package api.order;
+
+option csharp_namespace = "Common.Protobuf";
+
+message CreateOrderRequest {
+  string token = 1;
+  CreateOrderDto order = 2;
+}
+
+message CreateOrderDto {
+  int64 userId = 1;
+  repeated CreateOrderItemDto items = 2;
+}
+
+message CreateOrderItemDto {
+  int64 beerId = 1;
+  int32 quantity = 2;
+  string price = 3;
+}

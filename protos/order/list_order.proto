@@ -1,0 +1,15 @@
+﻿syntax = "proto3";
+
+package api.order;
+
+import "order/order.proto";
+
+option csharp_namespace = "Common.Protobuf";
+
+message ListOrdersRequest {
+  string token = 1;
+}
+
+message ListOrdersResponse {
+  repeated OrderDto orders = 1;
+}
