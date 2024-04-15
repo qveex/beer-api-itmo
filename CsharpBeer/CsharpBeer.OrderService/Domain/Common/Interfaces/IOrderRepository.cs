@@ -1,6 +1,12 @@
-﻿namespace CsharpBeer.OrderService.Domain.Common.Interfaces;
+﻿using CsharpBeer.OrderService.Domain.Orders;
+
+namespace CsharpBeer.OrderService.Domain.Common.Interfaces;
 
 public interface IOrderRepository
 {
-    //TODO contract
+    Task<Order> GetOrderById(long id);
+    Task<List<Order>> ListOrdersByUserId(long userId);
+    Task<Order> CreateOrder(Order order);
+    Task<Order> UpdateOrder(Order order);
+    Task DeleteOrderById(long id);
 }

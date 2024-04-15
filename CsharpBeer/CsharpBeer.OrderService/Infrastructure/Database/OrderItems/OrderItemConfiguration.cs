@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace CsharpBeer.OrderService.Infrastructure.Database.Orders;
+namespace CsharpBeer.OrderService.Infrastructure.Database.OrderItems;
 
 public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
 {
