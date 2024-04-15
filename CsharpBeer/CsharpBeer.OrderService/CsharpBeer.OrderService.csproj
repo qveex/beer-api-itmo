@@ -8,8 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Protobuf Include="Protos\order.proto" GrpcServices="Server" />
-        <Protobuf Include="..\..\go_beer_catalog\api\proto\*.proto" GrpcServices="Client" />
+        <Protobuf ProtoRoot="../../protos/" Include="../../protos/order/*.proto" GrpcServices="Server" AdditionalImportDirs="../../protos/"/>
+        <Protobuf ProtoRoot="../../protos/" Include="../../protos/catalog/*.proto" GrpcServices="Client" AdditionalImportDirs="../../protos/"/>
+        <Protobuf ProtoRoot="../../protos/" Include="../../protos/sso/*.proto" GrpcServices="Client" AdditionalImportDirs="../../protos/"/>
     </ItemGroup>
 
     <ItemGroup>
