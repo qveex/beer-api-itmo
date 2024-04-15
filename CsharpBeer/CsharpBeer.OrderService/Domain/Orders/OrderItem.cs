@@ -8,4 +8,16 @@ public class OrderItem
     public decimal Price { get; set; }
     
     public virtual Order Order { get; set; }
+
+    public static OrderItem Create(long orderId,
+        long beerId,
+        int quantity,
+        decimal price) =>
+        new()
+        {
+            OrderId = orderId,
+            BeerId = beerId,
+            Quantity = quantity,
+            Price = price
+        };
 }
