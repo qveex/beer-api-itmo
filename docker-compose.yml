@@ -49,7 +49,9 @@ services:
     ports:
       - "8081:8081"
   order:
-    build: CsharpBeer/CsharpBeer.OrderService
+    build:
+      context: .
+      dockerfile: CsharpBeer/CsharpBeer.OrderService/Dockerfile
     depends_on:
       - order-db
     ports:
