@@ -1,10 +1,20 @@
 package repository
 
 import (
+	"gorm.io/gorm"
 	pb "main/pkg/api"
 )
 
-// CreateNewBeer TODO domain entity && id
+type CatalogRepository struct {
+	db *gorm.DB
+}
+
+func NewCatalogRepository(db *gorm.DB) *CatalogRepository {
+	return &CatalogRepository{
+		db: db,
+	}
+}
+
 func (r *CatalogRepository) CreateNewBeer(beer *pb.Beer) (int64, error) {
 	var lastBeer *pb.Beer
 	r.db.Last(&lastBeer)

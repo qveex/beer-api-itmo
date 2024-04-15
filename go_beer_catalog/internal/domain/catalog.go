@@ -1,6 +1,17 @@
 package domain
 
-import pb "main/pkg/api"
+import (
+	"main/internal/repository"
+	pb "main/pkg/api"
+)
+
+type CatalogService struct {
+	repo *repository.CatalogRepository
+}
+
+func NewCatalogService(repo *repository.CatalogRepository) *CatalogService {
+	return &CatalogService{repo: repo}
+}
 
 func (s *CatalogService) CreateNewBeer(beer *pb.Beer) (int64, error) {
 	return s.repo.CreateNewBeer(beer)

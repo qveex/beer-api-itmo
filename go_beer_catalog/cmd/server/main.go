@@ -5,10 +5,11 @@ import (
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"log"
+	"main/internal/controller"
 	"main/internal/env"
-	pr "main/internal/pkg"
+	pr "main/internal/pkg/di"
+	"main/internal/repository"
 	pb "main/pkg/api"
-	"main/pkg/controller"
 	"net"
 )
 
@@ -28,9 +29,16 @@ func initServer() {
 	port := fmt.Sprintf(":%s", env.GetEnv(serverPort, "8080"))
 	s := grpc.NewServer()
 
-	service := pr.Provider.GetCatalogService()
+	catalogService := pr.Provider.GetCatalogService()
+	favoriteService := pr.Provider.GetFavoriteService()
 
-	pb.RegisterCatalogServer(s, &controller.Server{Service: service})
+	pb.RegisterCatalogServer(
+		s,
+		&controller.Server{
+			CatalogService:  catalogService,
+			FavoriteService: favoriteService,
+		},
+	)
 	l, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatal(err)
@@ -44,7 +52,7 @@ func initServer() {
 
 func initDb() {
 	db := pr.Provider.GetDb()
-	err := db.AutoMigrate(&pb.Beer{})
+	err := db.AutoMigrate(&pb.Beer{}, repository.Favorite{})
 	if err != nil {
 		panic(err)
 	}

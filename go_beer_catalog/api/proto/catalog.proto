@@ -7,6 +7,9 @@ import "get_beer.proto";
 import "create_beer.proto";
 import "update_beer.proto";
 import "delete_beer.proto";
+import "set_favorite.proto";
+import "get_favorites.proto";
+import "delete_favorite.proto";
 
 option go_package = ".";
 
@@ -16,4 +19,8 @@ service Catalog {
     rpc CreateBeer(CreateBeerRequest) returns (CreateBeerResponse) {}
     rpc UpdateBeer(UpdateBeerRequest) returns (UpdateBeerResponse) {}
     rpc DeleteBeer(DeleteBeerRequest) returns (DeleteBeerResponse) {}
+
+    rpc SetFavorite(SetFavoriteRequest) returns (SetFavoriteResponse) {}
+    rpc GetFavorites(GetFavoritesRequest) returns (GetFavoritesResponse) {}
+    rpc DeleteFavorites(DeleteFavoriteRequest) returns (DeleteFavoriteResponse) {}
 }

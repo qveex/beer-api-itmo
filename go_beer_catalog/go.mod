@@ -3,6 +3,7 @@ module main
 go 1.22.2
 
 require (
+	github.com/Krutov777/protos v1.0.1
 	cloud.google.com/go/compute v1.24.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	filippo.io/edwards25519 v1.1.0 // indirect
