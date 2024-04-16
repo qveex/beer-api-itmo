@@ -2,6 +2,7 @@ package di
 
 import (
 	"fmt"
+	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"main/internal/env"
@@ -21,12 +22,12 @@ func (sp *ServiceProvider) GetDb() *gorm.DB {
 	}
 
 	dsn := fmt.Sprintf(
-		"host=%s user=%s password=%s dbname=%s port=%s",
-		env.GetEnv(dbAddrEnv, ""),
+		"postgres://%v:%v@%v:%v/%v?sslmode=disable",
 		env.GetEnv(dbUserEnv, ""),
 		env.GetEnv(dbPassEnv, ""),
-		env.GetEnv(dbNameEnv, ""),
+		env.GetEnv(dbAddrEnv, ""),
 		env.GetEnv(dbPortEnv, ""),
+		env.GetEnv(dbNameEnv, ""),
 	)
 
 	var err error
