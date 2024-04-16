@@ -23,6 +23,12 @@ public static class OrderExtensions
     public static IEnumerable<Order> ToDomain(this IEnumerable<OrderDto> dtos) =>
         dtos.Select(d => d.ToDomain());
 
+    public static Order ToDomain(this CreateOrderDto dto) => 
+        Order.Create(-1, userId: dto.UserId, items: dto.Items.ToDomain());
+
+    public static IEnumerable<Order> ToDomain(this IEnumerable<CreateOrderDto> dtos) =>
+        dtos.Select(d => d.ToDomain());
+
     public static OrderDto ToDto(this Order order)
     {
         var dto = new OrderDto()

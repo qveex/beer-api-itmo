@@ -8,7 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 {
-    builder.Services.AddGrpc();
+    builder.Services.AddGrpc(op => 
+    {
+        op.EnableDetailedErrors = true;
+    });
     
     var catalogAddress = builder.Configuration.GetSection(Constants.GRPC_SECTION)[Constants.CATALOG_ADDRESS];
     var identityAddress = builder.Configuration.GetSection(Constants.GRPC_SECTION)[Constants.IDENTITY_ADDRESS];

@@ -35,4 +35,15 @@ public static class OrderItemExtensions
     
     public static IEnumerable<OrderItem> ToDomain(this IEnumerable<OrderItemDto> items) =>
         items.Select(oi => oi.ToDomain());
+
+    public static OrderItem ToDomain(this CreateOrderItemDto dto) =>
+        OrderItem.Create(
+            orderId: -1,
+            beerId: dto.BeerId,
+            quantity: dto.Quantity,
+            price: decimal.Parse(dto.Price)
+        );  
+    
+    public static IEnumerable<OrderItem> ToDomain(this IEnumerable<CreateOrderItemDto> items) =>
+        items.Select(oi => oi.ToDomain());
 }
