@@ -18,8 +18,8 @@ services:
     restart: always
     environment:
       - POSTGRES_DB=catalog
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=root
+      - POSTGRES_USER=qveex
+      - POSTGRES_PASSWORD=qveex
     ports:
       - "5433:5432"
     volumes:
@@ -49,7 +49,7 @@ services:
     depends_on:
       - catalog-db
     ports:
-      - "8081:8081"
+      - "8081:8080"
   
   order:
     build:

@@ -2,7 +2,7 @@ package di
 
 import (
 	"fmt"
-	"gorm.io/driver/mysql"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"main/internal/env"
 )
@@ -21,16 +21,16 @@ func (sp *ServiceProvider) GetDb() *gorm.DB {
 	}
 
 	dsn := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s",
+		"host=%s user=%s password=%s dbname=%s port=%s",
+		env.GetEnv(dbAddrEnv, ""),
 		env.GetEnv(dbUserEnv, ""),
 		env.GetEnv(dbPassEnv, ""),
-		env.GetEnv(dbAddrEnv, ""),
-		env.GetEnv(dbPortEnv, ""),
 		env.GetEnv(dbNameEnv, ""),
+		env.GetEnv(dbPortEnv, ""),
 	)
 
 	var err error
-	sp.db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	sp.db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	if err != nil {
 		panic(err)

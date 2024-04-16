@@ -37,13 +37,18 @@ func (r *FavoriteRepository) GetFavorites(userId int64) ([]*pb.Beer, error) {
 
 func (r *FavoriteRepository) SetFavorite(userId int64, beerId int64) error {
 	var exists bool
-	result := r.db.Raw("select true from favorites where user_id = ? and beer_id = ?", userId, beerId).Scan(&exists)
 
+	r.db.Raw("select true from favorites where user_id = ? and beer_id = ?", userId, beerId).Scan(&exists)
 	if exists {
 		return status.Error(codes.AlreadyExists, "favorite already exist")
 	}
 
-	result = r.db.Create(&Favorite{UserId: userId, BeerId: beerId})
+	r.db.Raw("select true from beers where beer_id = ?", beerId).Scan(&exists)
+	if !exists {
+		return status.Error(codes.NotFound, "beer not found")
+	}
+
+	result := r.db.Create(&Favorite{UserId: userId, BeerId: beerId})
 
 	return result.Error
 }
