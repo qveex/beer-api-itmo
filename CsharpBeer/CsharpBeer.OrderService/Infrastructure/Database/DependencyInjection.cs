@@ -18,6 +18,7 @@ public static class DependencyInjection
         services.AddDbContext<OrderDbContext>(options => options.UseNpgsql(connectionString));
         services.AddTransient<IOrderRepository, OrderRepository>();
         services.AddTransient<IOrderItemRepository, OrderItemRepository>();
+        services.AddTransient<IUnitOfWork, OrderDbContext>();
         
         return services;
     }

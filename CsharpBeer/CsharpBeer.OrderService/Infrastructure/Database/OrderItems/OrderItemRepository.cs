@@ -32,7 +32,6 @@ public class OrderItemRepository(OrderDbContext context) : IOrderItemRepository
     public async Task<OrderItem> CreateOrder(OrderItem orderItem)
     {
         await _context.OrderItems.AddAsync(orderItem);
-        await _context.SaveChangesAsync();
 
         return orderItem;
     }
@@ -47,8 +46,6 @@ public class OrderItemRepository(OrderDbContext context) : IOrderItemRepository
         //if (order is null) return Error.NotFound($"Order with id={id} not found.");
         orderInDb.CopyFieldsIfNotNull(orderItem);
 
-        await _context.SaveChangesAsync();
-
         return orderInDb;
     }
 
@@ -59,7 +56,25 @@ public class OrderItemRepository(OrderDbContext context) : IOrderItemRepository
         //TODO result patter to project
         //if (order is null) return Error.NotFound($"Order with id={id} not found.");
         _context.OrderItems.Remove(orderItem);
+    }
 
-        await _context.SaveChangesAsync();
+    public async Task<OrderItem> GetOrderItemAsNoTrack(long orderId, long beerId)
+    {
+        var orderItem = await _context.OrderItems.AsNoTracking().FirstOrDefaultAsync(o =>  o.OrderId == orderId && o.BeerId == beerId);
+        
+        //TODO result patter to project
+        //if (order is null) return Error.NotFound($"Order with id={id} not found.");
+
+        return orderItem;
+    }
+
+    public async Task<List<OrderItem>> GetOrderItemsByOrderIdAsNoTrack(long orderId)
+    {
+        var orderItem = await _context.OrderItems.AsNoTracking().Where(o =>  o.OrderId == orderId).ToListAsync();
+        
+        //TODO result patter to project
+        //if (order is null) return Error.NotFound($"Order with id={id} not found.");
+
+        return orderItem;
     }
 }

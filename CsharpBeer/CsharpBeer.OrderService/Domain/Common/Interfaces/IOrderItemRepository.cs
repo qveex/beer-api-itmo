@@ -6,6 +6,8 @@ public interface IOrderItemRepository
 {
     Task<OrderItem> GetOrderItem(long orderId, long beerId);
     Task<List<OrderItem>> GetOrderItemsByOrderId(long orderId);
+    Task<OrderItem> GetOrderItemAsNoTrack(long orderId, long beerId);
+    Task<List<OrderItem>> GetOrderItemsByOrderIdAsNoTrack(long orderId);
     Task<OrderItem> CreateOrder(OrderItem order);
     Task<OrderItem> UpdateOrder(OrderItem order);
     Task DeleteOrderItemById(long orderId, long beerId);

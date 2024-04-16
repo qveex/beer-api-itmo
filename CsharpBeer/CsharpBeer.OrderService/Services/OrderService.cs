@@ -13,12 +13,14 @@ public class OrderService(
     ILogger<OrderService> logger,
     IOrderRepository orderRepository,
     IOrderItemRepository orderItemRepository,
+    IUnitOfWork unitOfWork,
     Auth.AuthClient authClient,
     Catalog.CatalogClient catalogClient) : OrderServiceGrpc.OrderServiceGrpcBase
 {
     private readonly ILogger<OrderService> _logger = logger;
     private readonly IOrderRepository _orderRepository = orderRepository;
     private readonly IOrderItemRepository _orderItemRepository = orderItemRepository;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly Auth.AuthClient _authClient = authClient;
     private readonly Catalog.CatalogClient _catalogClient = catalogClient;
 
@@ -27,8 +29,8 @@ public class OrderService(
         //TODO Check if user is the owner of the order
         
         
-        var order = await _orderRepository.GetOrderById(request.OrderId);
-        var orderItems = await _orderItemRepository.GetOrderItemsByOrderId(request.OrderId);
+        var order = await _orderRepository.GetOrderByIdAsNoTrack(request.OrderId);
+        var orderItems = await _orderItemRepository.GetOrderItemsByOrderIdAsNoTrack(request.OrderId);
         
         var orderDto = order.ToDto();
         orderDto.Items.AddRange(GetOrderItemsDto(orderItems));
@@ -45,13 +47,13 @@ public class OrderService(
         var token = request.Token;
         var userId = long.Parse(token);
 
-        var orders = await _orderRepository.ListOrdersByUserId(userId);
+        var orders = await _orderRepository.ListOrdersByUserIdAsNoTrack(userId);
 
         List<OrderDto> orderDtos = [];
         foreach (var order in orders)
         {
             var orderDto = order.ToDto();
-            var orderItems = await _orderItemRepository.GetOrderItemsByOrderId(order.OrderId);
+            var orderItems = await _orderItemRepository.GetOrderItemsByOrderIdAsNoTrack(order.OrderId);
             orderDto.Items.AddRange(GetOrderItemsDto(orderItems));
             orderDtos.Add(orderDto);
         }
@@ -61,23 +63,55 @@ public class OrderService(
         return response;
     }
 
-    public override Task<OrderDto> CreateOrder(CreateOrderRequest request, ServerCallContext context)
+    public override async Task<OrderDto> CreateOrder(CreateOrderRequest request, ServerCallContext context)
     {
+        //TODO Extract userId from token to get orders
         //TODO validations checks
+        // Validate that all beers are exists in catalog
+        //if (request.Order is null) Error.
+        //foreach (var beer in request.Order.Items)
+
+        var order = request.Order.ToDomain();
+        await _orderRepository.CreateOrder(order);
+
+        await _unitOfWork.CommitChangesAsync();
+
+        return order.ToDto();
+    }
+
+    public override async Task<OrderDto> UpdateOrder(UpdateOrderRequest request, ServerCallContext context)
+    {
+        //TODO Extract userId from token to get orders
+        var orderId = request.Order.OrderId;
+
+        var orderInApp = await _orderRepository.GetOrderById(orderId);
+        //if (orderInApp is null) Error.NotFound("Order with id {request.Order.OrderId} is not found.");
+        var orderItemsInApp = await _orderItemRepository.GetOrderItemsByOrderId(orderId);
         
-        return base.CreateOrder(request, context);
+        var orderUpdate = request.Order.ToDomain();
+        orderInApp.CopyFieldsIfNotNull(orderUpdate);
+        // TODO update orderItems
+
+        await _unitOfWork.CommitChangesAsync();
+
+        var orderDto = orderInApp.ToDto();
+        orderDto.Items.AddRange(orderItemsInApp.ToDto());
+
+        return orderDto;
     }
 
-    public override Task<OrderDto> UpdateOrder(UpdateOrderRequest request, ServerCallContext context)
+    public override async Task<Empty> DeleteOrder(DeleteOrderRequest request, ServerCallContext context)
     {
-        //TODO
-        return base.UpdateOrder(request, context);
-    }
+        //TODO Extract userId from token to get orders
+        var orderId = request.OrderId;
 
-    public override Task<Empty> DeleteOrder(DeleteOrderRequest request, ServerCallContext context)
-    {
-        //TODO
-        return base.DeleteOrder(request, context);
+        var orderInApp = await _orderRepository.GetOrderById(orderId);
+        //if (orderInApp is null) Error.NotFound("Order with id {request.Order.OrderId} is not found.");
+        
+        await _orderRepository.DeleteOrderById(orderId);
+        await _unitOfWork.CommitChangesAsync();
+        
+        return new Empty();
     }
 
     private IEnumerable<OrderItemDto> GetOrderItemsDto(IEnumerable<OrderItem> orderItems)
