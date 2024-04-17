@@ -21,7 +21,7 @@ func (sp ServiceProvider) GetAuthClient() *ssov1.AuthClient {
 	}
 
 	conn, err := grpc.NewClient(
-		":44044",
+		"sso:44044",
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithChainUnaryInterceptor(grpcretry.UnaryClientInterceptor(retryOpts...)),
 	)

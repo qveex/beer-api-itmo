@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Catalog_GetBeers_FullMethodName        = "/api.Catalog/GetBeers"
-	Catalog_GetBeer_FullMethodName         = "/api.Catalog/GetBeer"
-	Catalog_CreateBeer_FullMethodName      = "/api.Catalog/CreateBeer"
-	Catalog_UpdateBeer_FullMethodName      = "/api.Catalog/UpdateBeer"
-	Catalog_DeleteBeer_FullMethodName      = "/api.Catalog/DeleteBeer"
-	Catalog_SetFavorite_FullMethodName     = "/api.Catalog/SetFavorite"
-	Catalog_GetFavorites_FullMethodName    = "/api.Catalog/GetFavorites"
-	Catalog_DeleteFavorites_FullMethodName = "/api.Catalog/DeleteFavorites"
+	Catalog_GetBeers_FullMethodName       = "/api.Catalog/GetBeers"
+	Catalog_GetBeer_FullMethodName        = "/api.Catalog/GetBeer"
+	Catalog_CreateBeer_FullMethodName     = "/api.Catalog/CreateBeer"
+	Catalog_UpdateBeer_FullMethodName     = "/api.Catalog/UpdateBeer"
+	Catalog_DeleteBeer_FullMethodName     = "/api.Catalog/DeleteBeer"
+	Catalog_SetFavorite_FullMethodName    = "/api.Catalog/SetFavorite"
+	Catalog_GetFavorites_FullMethodName   = "/api.Catalog/GetFavorites"
+	Catalog_DeleteFavorite_FullMethodName = "/api.Catalog/DeleteFavorite"
 )
 
 // CatalogClient is the client API for Catalog service.
@@ -40,7 +40,7 @@ type CatalogClient interface {
 	DeleteBeer(ctx context.Context, in *DeleteBeerRequest, opts ...grpc.CallOption) (*DeleteBeerResponse, error)
 	SetFavorite(ctx context.Context, in *SetFavoriteRequest, opts ...grpc.CallOption) (*SetFavoriteResponse, error)
 	GetFavorites(ctx context.Context, in *GetFavoritesRequest, opts ...grpc.CallOption) (*GetFavoritesResponse, error)
-	DeleteFavorites(ctx context.Context, in *DeleteFavoriteRequest, opts ...grpc.CallOption) (*DeleteFavoriteResponse, error)
+	DeleteFavorite(ctx context.Context, in *DeleteFavoriteRequest, opts ...grpc.CallOption) (*DeleteFavoriteResponse, error)
 }
 
 type catalogClient struct {
@@ -114,9 +114,9 @@ func (c *catalogClient) GetFavorites(ctx context.Context, in *GetFavoritesReques
 	return out, nil
 }
 
-func (c *catalogClient) DeleteFavorites(ctx context.Context, in *DeleteFavoriteRequest, opts ...grpc.CallOption) (*DeleteFavoriteResponse, error) {
+func (c *catalogClient) DeleteFavorite(ctx context.Context, in *DeleteFavoriteRequest, opts ...grpc.CallOption) (*DeleteFavoriteResponse, error) {
 	out := new(DeleteFavoriteResponse)
-	err := c.cc.Invoke(ctx, Catalog_DeleteFavorites_FullMethodName, in, out, opts...)
+	err := c.cc.Invoke(ctx, Catalog_DeleteFavorite_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,7 @@ type CatalogServer interface {
 	DeleteBeer(context.Context, *DeleteBeerRequest) (*DeleteBeerResponse, error)
 	SetFavorite(context.Context, *SetFavoriteRequest) (*SetFavoriteResponse, error)
 	GetFavorites(context.Context, *GetFavoritesRequest) (*GetFavoritesResponse, error)
-	DeleteFavorites(context.Context, *DeleteFavoriteRequest) (*DeleteFavoriteResponse, error)
+	DeleteFavorite(context.Context, *DeleteFavoriteRequest) (*DeleteFavoriteResponse, error)
 	mustEmbedUnimplementedCatalogServer()
 }
 
@@ -163,8 +163,8 @@ func (UnimplementedCatalogServer) SetFavorite(context.Context, *SetFavoriteReque
 func (UnimplementedCatalogServer) GetFavorites(context.Context, *GetFavoritesRequest) (*GetFavoritesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFavorites not implemented")
 }
-func (UnimplementedCatalogServer) DeleteFavorites(context.Context, *DeleteFavoriteRequest) (*DeleteFavoriteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method DeleteFavorites not implemented")
+func (UnimplementedCatalogServer) DeleteFavorite(context.Context, *DeleteFavoriteRequest) (*DeleteFavoriteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteFavorite not implemented")
 }
 func (UnimplementedCatalogServer) mustEmbedUnimplementedCatalogServer() {}
 
@@ -305,20 +305,20 @@ func _Catalog_GetFavorites_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Catalog_DeleteFavorites_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Catalog_DeleteFavorite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(DeleteFavoriteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CatalogServer).DeleteFavorites(ctx, in)
+		return srv.(CatalogServer).DeleteFavorite(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Catalog_DeleteFavorites_FullMethodName,
+		FullMethod: Catalog_DeleteFavorite_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CatalogServer).DeleteFavorites(ctx, req.(*DeleteFavoriteRequest))
+		return srv.(CatalogServer).DeleteFavorite(ctx, req.(*DeleteFavoriteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -359,8 +359,8 @@ var Catalog_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Catalog_GetFavorites_Handler,
 		},
 		{
-			MethodName: "DeleteFavorites",
-			Handler:    _Catalog_DeleteFavorites_Handler,
+			MethodName: "DeleteFavorite",
+			Handler:    _Catalog_DeleteFavorite_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

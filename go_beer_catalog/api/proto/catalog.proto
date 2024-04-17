@@ -22,5 +22,5 @@ service Catalog {
 
     rpc SetFavorite(SetFavoriteRequest) returns (SetFavoriteResponse) {}
     rpc GetFavorites(GetFavoritesRequest) returns (GetFavoritesResponse) {}
-    rpc DeleteFavorites(DeleteFavoriteRequest) returns (DeleteFavoriteResponse) {}
+    rpc DeleteFavorite(DeleteFavoriteRequest) returns (DeleteFavoriteResponse) {}
 }

@@ -8,9 +8,8 @@ import (
 )
 
 type Favorite struct {
-	gorm.Model
-	UserId int64
-	BeerId int64
+	UserId int64 `gorm:"primaryKey"`
+	BeerId int64 `gorm:"primaryKey"`
 }
 
 type FavoriteRepository struct {
@@ -61,7 +60,7 @@ func (r *FavoriteRepository) DeleteFavorite(userId int64, beerId int64) error {
 		return status.Error(codes.NotFound, "favorite doesn't exist")
 	}
 
-	result = r.db.Delete(Favorite{UserId: userId, BeerId: beerId})
+	result = r.db.Delete(&Favorite{UserId: userId, BeerId: beerId})
 
 	return result.Error
 }
