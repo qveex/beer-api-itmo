@@ -5,7 +5,6 @@ package api;
 option go_package = ".";
 
 message DeleteFavoriteRequest {
-  int64 userId = 1;
   int64 beerId = 2;
 }
 

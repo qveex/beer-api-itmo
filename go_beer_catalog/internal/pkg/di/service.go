@@ -7,7 +7,7 @@ func (sp *ServiceProvider) GetCatalogService() *domain.CatalogService {
 		return sp.catalogService
 	}
 
-	sp.catalogService = domain.NewCatalogService(sp.GetCatalogRepository())
+	sp.catalogService = domain.NewCatalogService(sp.GetCatalogRepository(), sp.GetAuthRepository())
 
 	return sp.catalogService
 }
@@ -17,7 +17,7 @@ func (sp *ServiceProvider) GetFavoriteService() *domain.FavoriteService {
 		return sp.favService
 	}
 
-	sp.favService = domain.NewFavoriteService(sp.GetFavoriteRepository())
+	sp.favService = domain.NewFavoriteService(sp.GetFavoriteRepository(), sp.GetAuthRepository())
 
 	return sp.favService
 }

@@ -1,19 +1,26 @@
 package domain
 
 import (
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"main/internal/repository"
 	pb "main/pkg/api"
 )
 
 type CatalogService struct {
 	repo *repository.CatalogRepository
+	auth *repository.AuthRepository
 }
 
-func NewCatalogService(repo *repository.CatalogRepository) *CatalogService {
-	return &CatalogService{repo: repo}
+func NewCatalogService(repo *repository.CatalogRepository, auth *repository.AuthRepository) *CatalogService {
+	return &CatalogService{repo: repo, auth: auth}
 }
 
-func (s *CatalogService) CreateNewBeer(beer *pb.Beer) (int64, error) {
+func (s *CatalogService) CreateNewBeer(token string, beer *pb.Beer) (int64, error) {
+	isAdmin, err := s.isAdmin(token)
+	if err != nil || !isAdmin {
+		return -1, err
+	}
 	return s.repo.CreateNewBeer(beer)
 }
 
@@ -67,10 +74,35 @@ func (s *CatalogService) GetBeer(beerId int64) (*pb.Beer, error) {
 	return s.repo.GetBeer(beerId)
 }
 
-func (s *CatalogService) UpdateBeer(beerId int64, beer *pb.Beer) (*pb.Beer, error) {
+func (s *CatalogService) UpdateBeer(token string, beerId int64, beer *pb.Beer) (*pb.Beer, error) {
+	isAdmin, err := s.isAdmin(token)
+	if err != nil || !isAdmin {
+		return nil, err
+	}
 	return s.repo.UpdateBeer(beerId, beer)
 }
 
-func (s *CatalogService) DeleteBeer(beerId int64) (*pb.Beer, error) {
+func (s *CatalogService) DeleteBeer(token string, beerId int64) (*pb.Beer, error) {
+	isAdmin, err := s.isAdmin(token)
+	if err != nil || !isAdmin {
+		return nil, err
+	}
 	return s.repo.DeleteBeer(beerId)
+}
+
+func (s *CatalogService) isAdmin(token string) (bool, error) {
+	userId, err := s.auth.GetUserId(token)
+	if err != nil {
+		return false, err
+	}
+	isAdmin, err := s.auth.IsAdmin(userId)
+
+	if err != nil {
+		return false, err
+	}
+	if isAdmin {
+		return true, nil
+	} else {
+		return false, status.Error(codes.PermissionDenied, "user is not admin")
+	}
 }

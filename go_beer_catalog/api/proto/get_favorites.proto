@@ -6,9 +6,7 @@ import "beer.proto";
 
 option go_package = ".";
 
-message GetFavoritesRequest {
-  int64 userId = 1;
-}
+message GetFavoritesRequest {}
 
 message GetFavoritesResponse {
   repeated Beer beers = 1;

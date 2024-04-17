@@ -15,13 +15,12 @@ func NewAuthRepository(api *ssov1.AuthClient) *AuthRepository {
 	}
 }
 
-func (r *AuthRepository) GetUserId() (int64, error) {
-	/*beer, err := r.api.GetBeer(context.Background(), &pb.GetBeerRequest{BeerId: 1})
+func (r *AuthRepository) GetUserId(token string) (int64, error) {
+	info, err := r.api.GetUserInfo(context.Background(), &ssov1.GetUserInfoRequest{Token: token})
 	if err != nil {
 		return -1, err
 	}
-	return beer.Beer.BeerId, nil*/
-	return 0, nil
+	return info.UserId, nil
 }
 
 func (r *AuthRepository) IsAdmin(userId int64) (bool, error) {
