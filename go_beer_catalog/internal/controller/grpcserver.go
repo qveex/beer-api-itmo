@@ -15,7 +15,14 @@ type Server struct {
 
 // GetBeers ...
 func (s *Server) GetBeers(ctx context.Context, req *pb.GetBeersRequest) (*pb.GetBeersResponse, error) {
-	result, err := s.CatalogService.GetAllBeers() // TODO filters
+	result, err := s.CatalogService.GetAllBeers(
+		req.Limit,
+		req.Name,
+		req.Brand,
+		req.Type,
+		req.Deg,
+		req.Sweet,
+	)
 	return &pb.GetBeersResponse{Beers: result}, err
 }
 
