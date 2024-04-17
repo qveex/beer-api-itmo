@@ -62,12 +62,13 @@ func (r *CatalogRepository) UpdateBeer(beerId int64, beer *pb.Beer) (*pb.Beer, e
 	var foundBeer *pb.Beer
 	result := r.db.First(&foundBeer, beerId)
 
-	if foundBeer == nil {
+	if foundBeer == nil || result.Error != nil {
 		return nil, result.Error
 	}
 
+	beer.BeerId = foundBeer.BeerId
 	foundBeer = beer
-	result = r.db.Save(foundBeer)
+	result = r.db.Where("beer_id = ?", beerId).Updates(foundBeer)
 
 	return beer, result.Error
 }
