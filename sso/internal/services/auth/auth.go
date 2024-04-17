@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"time"
 
+	"grpc-service-ref/internal/domain/dto"
 	"grpc-service-ref/internal/domain/models"
 	"grpc-service-ref/internal/lib/jwt"
 	"grpc-service-ref/internal/lib/logger/sl"
@@ -114,6 +115,38 @@ func (a *Auth) Login(
 	}
 
 	return token, nil
+}
+
+func (a *Auth) GetUserInfo(
+	ctx context.Context,
+	token string,
+) (dto.UserDto, error) {
+	const op = "UserInfo.GetUserInfo"
+
+	log := a.log.With(
+		slog.String("op", op),
+		slog.String("token", token),
+	)
+
+	log.Info("attempting to get user info")
+	email, err := jwt.ExtractUserInfoFromJWT(token, "test-secret")
+	if err != nil {
+		return dto.UserDto{}, fmt.Errorf("%s: %w", op, err)
+	}
+	user, err := a.usrProvider.User(ctx, email)
+	if err != nil {
+		if errors.Is(err, storage.ErrUserNotFound) {
+			a.log.Warn("user not found", sl.Err(err))
+
+			return dto.UserDto{}, fmt.Errorf("%s: %w", op, ErrInvalidCredentials)
+		}
+
+		a.log.Error("failed to get user", sl.Err(err))
+
+		return dto.UserDto{}, fmt.Errorf("%s: %w", op, err)
+	}
+
+	return dto.UserDto{ID: user.ID, Email: user.Email}, nil
 }
 
 // RegisterNewUser registers new user in the system and returns user ID.

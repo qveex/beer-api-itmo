@@ -3,6 +3,7 @@ package authgrpc
 import (
 	"context"
 	"errors"
+	"grpc-service-ref/internal/domain/dto"
 
 	"grpc-service-ref/internal/services/auth"
 	"grpc-service-ref/internal/storage"
@@ -26,6 +27,7 @@ type Auth interface {
 		password string,
 	) (userID int64, err error)
 	IsAdmin(ctx context.Context, userID int64) (bool, error)
+	GetUserInfo(ctx context.Context, token string) (dto.UserDto, error)
 }
 
 type serverAPI struct {
@@ -107,4 +109,24 @@ func (s *serverAPI) IsAdmin(
 	}
 
 	return &ssov1.IsAdminResponse{IsAdmin: isAdmin}, nil
+}
+
+func (s *serverAPI) GetUserInfo(
+	ctx context.Context,
+	in *ssov1.GetUserInfoRequest,
+) (*ssov1.GetUserInfoResponse, error) {
+	if in.Token == "" {
+		return nil, status.Error(codes.InvalidArgument, "token is required")
+	}
+
+	userInfoDto, err := s.auth.GetUserInfo(ctx, in.GetToken())
+	if err != nil {
+		if errors.Is(err, storage.ErrUserNotFound) {
+			return nil, status.Error(codes.NotFound, "user not found")
+		}
+
+		return nil, status.Error(codes.Internal, "failed to find user")
+	}
+
+	return &ssov1.GetUserInfoResponse{UserId: userInfoDto.ID, Email: userInfoDto.Email}, nil
 }

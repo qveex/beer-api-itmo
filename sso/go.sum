@@ -2,8 +2,8 @@ github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 h1:L/gRVlceqvL25
 github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161/go.mod h1:xomTg63KZ2rFqZQzSB4Vz2SUXa1BpHTVz9L5PTmPC4E=
 github.com/BurntSushi/toml v1.2.1 h1:9F2/+DoOYIOksmaJFPw1tGFy1eDnIJXg+UHjuD8lTak=
 github.com/BurntSushi/toml v1.2.1/go.mod h1:CxXYINrC8qIiEnFrOxCa7Jy5BFHlXnUU2pbicEuybxQ=
-github.com/Krutov777/protos v1.0.1 h1:Amh59wGOEQAwtGvSvv6gx0bs39SKAzdIRqgSYIkKc1U=
-github.com/Krutov777/protos v1.0.1/go.mod h1:GZRudgBN2kDpwUcHJ2kp+zq+RAR1MIo/wdhAYO0FxUg=
+github.com/Krutov777/protos v1.0.3 h1:CAzL2FJsitxXNoIWGqO6xoGv9Ur9JTTaTBRjQcY3kv0=
+github.com/Krutov777/protos v1.0.3/go.mod h1:GZRudgBN2kDpwUcHJ2kp+zq+RAR1MIo/wdhAYO0FxUg=
 github.com/Microsoft/go-winio v0.6.1 h1:9/kr64B9VUZrLm5YYwbGtUJnMgqWVOdUAXu6Migciow=
 github.com/Microsoft/go-winio v0.6.1/go.mod h1:LRdKpFKfdobln8UmuiYcKPot9D2v6svN5+sAH+4kjUM=
 github.com/brianvoe/gofakeit/v6 v6.23.2 h1:lVde18uhad5wII/f5RMVFLtdQNE0HaGFuBUXmYKk8i8=
