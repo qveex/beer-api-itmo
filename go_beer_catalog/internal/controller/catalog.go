@@ -11,6 +11,8 @@ func (s *Server) GetBeers(ctx context.Context, req *pb.GetBeersRequest) (*pb.Get
 		req.Limit,
 		req.Name,
 		req.Brand,
+		req.FromPrice,
+		req.ToPrice,
 		req.Type,
 		req.Deg,
 		req.Sweet,

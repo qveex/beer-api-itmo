@@ -25,7 +25,16 @@ func (r *CatalogRepository) CreateNewBeer(beer *pb.Beer) (int64, error) {
 	return beer.BeerId, result.Error
 }
 
-func (r *CatalogRepository) GetAllBeers(limit int, name string, brand string, beerType int, deg *int32, sweet *bool) ([]*pb.Beer, error) {
+func (r *CatalogRepository) GetAllBeers(
+	limit int,
+	name string,
+	brand string,
+	fromPrice *float64,
+	toPrice *float64,
+	beerType int,
+	deg *int32,
+	sweet *bool,
+) ([]*pb.Beer, error) {
 	var beers []*pb.Beer
 
 	result := r.db.
@@ -44,6 +53,14 @@ func (r *CatalogRepository) GetAllBeers(limit int, name string, brand string, be
 
 	if sweet != nil {
 		result = result.Where("sweet = ?", *sweet)
+	}
+
+	if fromPrice != nil {
+		result = result.Where("price >= ?", *fromPrice)
+	}
+
+	if toPrice != nil {
+		result = result.Where("price <= ?", *toPrice)
 	}
 
 	result.Find(&beers)

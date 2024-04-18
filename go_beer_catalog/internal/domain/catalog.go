@@ -24,7 +24,17 @@ func (s *CatalogService) CreateNewBeer(token string, beer *pb.Beer) (int64, erro
 	return s.repo.CreateNewBeer(beer)
 }
 
-func (s *CatalogService) GetAllBeers(limit *int32, name *string, brand *string, beerType *pb.Type, deg *int32, sweet *bool) ([]*pb.Beer, error) {
+func (s *CatalogService) GetAllBeers(
+	limit *int32,
+	name *string,
+	brand *string,
+	fromPrice *float64,
+	toPrice *float64,
+	beerType *pb.Type,
+	deg *int32,
+	sweet *bool,
+) ([]*pb.Beer, error) {
+
 	var localLimit int
 	var localName string
 	var localBrand string
@@ -67,7 +77,7 @@ func (s *CatalogService) GetAllBeers(limit *int32, name *string, brand *string, 
 		}
 	}
 
-	return s.repo.GetAllBeers(localLimit, localName, localBrand, localType, deg, sweet)
+	return s.repo.GetAllBeers(localLimit, localName, localBrand, fromPrice, toPrice, localType, deg, sweet)
 }
 
 func (s *CatalogService) GetBeer(beerId int64) (*pb.Beer, error) {
