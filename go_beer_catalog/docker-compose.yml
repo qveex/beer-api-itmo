@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  catalog-db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: catalog
+      POSTGRES_USER: qveex
+      POSTGRES_PASSWORD: qveex
+    ports:
+      - "5433:5432"
+    volumes:
+      - catalog_data:/var/lib/postgresql/data
+
+  catalog:
+    build: .
+    depends_on:
+      - catalog-db
+    ports:
+      - "8081:8080"
+
+volumes:
+  catalog_data:
