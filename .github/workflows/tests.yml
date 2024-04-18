@@ -1,0 +1,32 @@
+name: tests
+on: [push]
+
+jobs:
+  tests:
+    name: unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_catalog
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+
+    steps:
+    - name: testing catalog
+      env:
+          DB_USER: postgres
+          DB_PASS: postgres
+          DB_ADDR: localhost
+          DB_PORT: 5432
+          DB_NAME: test_catalog
+      run: |
+        cd go_beer_catalog
+        go test main/tests
