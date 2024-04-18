@@ -1,0 +1,23 @@
+name: deploy
+on: [push]
+
+jobs:
+  deploy:
+    name: remote ssh connect & build & deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+    - name: executing remote ssh commands
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        script_stop	: true
+        script: |
+          cd beer-api-itmo/
+          git pull
+          docker-compose down
+          docker-compose build
+          docker-compose up -d
