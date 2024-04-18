@@ -52,7 +52,7 @@ func initServer() {
 
 func initDb() {
 	db := pr.Provider.GetDb()
-	err := db.AutoMigrate(&pb.Beer{}, repository.Favorite{})
+	err := db.AutoMigrate(&repository.Favorite{}, &repository.Beer{})
 	if err != nil {
 		panic(err)
 	}

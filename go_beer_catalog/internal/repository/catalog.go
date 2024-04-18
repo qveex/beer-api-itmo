@@ -2,8 +2,17 @@ package repository
 
 import (
 	"gorm.io/gorm"
-	pb "main/pkg/api"
 )
+
+type Beer struct {
+	BeerId int64 `gorm:"primaryKey;autoIncrement:true;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	Name   string
+	Brand  string
+	Price  float64
+	Type   int32
+	Degree int32
+	Sweet  bool
+}
 
 type CatalogRepository struct {
 	db *gorm.DB
@@ -15,11 +24,8 @@ func NewCatalogRepository(db *gorm.DB) *CatalogRepository {
 	}
 }
 
-func (r *CatalogRepository) CreateNewBeer(beer *pb.Beer) (int64, error) {
-	var lastBeer *pb.Beer
-	r.db.Last(&lastBeer)
-	beer.BeerId = lastBeer.BeerId + 1 // костылек, нужна подвязка к орм
-
+func (r *CatalogRepository) CreateNewBeer(beer *Beer) (int64, error) {
+	beer.BeerId = 0
 	result := r.db.Create(&beer)
 
 	return beer.BeerId, result.Error
@@ -31,11 +37,11 @@ func (r *CatalogRepository) GetAllBeers(
 	brand string,
 	fromPrice *float64,
 	toPrice *float64,
-	beerType int,
+	beerType int32,
 	deg *int32,
 	sweet *bool,
-) ([]*pb.Beer, error) {
-	var beers []*pb.Beer
+) ([]*Beer, error) {
+	var beers []*Beer
 
 	result := r.db.
 		Limit(limit).
@@ -68,15 +74,15 @@ func (r *CatalogRepository) GetAllBeers(
 	return beers, nil
 }
 
-func (r *CatalogRepository) GetBeer(beerId int64) (*pb.Beer, error) {
-	var beer *pb.Beer
+func (r *CatalogRepository) GetBeer(beerId int64) (*Beer, error) {
+	var beer *Beer
 	result := r.db.First(&beer, beerId)
 
 	return beer, result.Error
 }
 
-func (r *CatalogRepository) UpdateBeer(beerId int64, beer *pb.Beer) (*pb.Beer, error) {
-	var foundBeer *pb.Beer
+func (r *CatalogRepository) UpdateBeer(beerId int64, beer *Beer) (*Beer, error) {
+	var foundBeer *Beer
 	result := r.db.First(&foundBeer, beerId)
 
 	if foundBeer == nil || result.Error != nil {
@@ -90,9 +96,9 @@ func (r *CatalogRepository) UpdateBeer(beerId int64, beer *pb.Beer) (*pb.Beer, e
 	return beer, result.Error
 }
 
-func (r *CatalogRepository) DeleteBeer(beerId int64) (*pb.Beer, error) {
+func (r *CatalogRepository) DeleteBeer(beerId int64) (*Beer, error) {
 
-	var beer *pb.Beer
+	var beer *Beer
 	result := r.db.First(&beer, beerId)
 
 	if beer == nil {

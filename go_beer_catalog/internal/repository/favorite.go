@@ -8,8 +8,9 @@ import (
 )
 
 type Favorite struct {
-	UserId int64 `gorm:"primaryKey"`
-	BeerId int64 `gorm:"primaryKey"`
+	UserId int64 `gorm:"primaryKey;autoIncrement:false"`
+	BeerId int64 `gorm:"primaryKey;autoIncrement:false"`
+	Beer   *Beer `gorm:"foreignKey:BeerId;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
 
 type FavoriteRepository struct {

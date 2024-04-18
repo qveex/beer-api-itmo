@@ -21,7 +21,7 @@ func (s *CatalogService) CreateNewBeer(token string, beer *pb.Beer) (int64, erro
 	if err != nil || !isAdmin {
 		return -1, err
 	}
-	return s.repo.CreateNewBeer(beer)
+	return s.repo.CreateNewBeer(mapToDb(beer))
 }
 
 func (s *CatalogService) GetAllBeers(
@@ -38,7 +38,6 @@ func (s *CatalogService) GetAllBeers(
 	var localLimit int
 	var localName string
 	var localBrand string
-	var localType int
 
 	if limit == nil {
 		localLimit = 50
@@ -55,33 +54,14 @@ func (s *CatalogService) GetAllBeers(
 	} else {
 		localBrand = *brand
 	}
-	if beerType == nil {
-		localType = -1
-	} else {
-		//localType = beerType.Descriptor().Index()
-		switch *beerType {
-		case pb.Type_ALE:
-			localType = 0
-		case pb.Type_LAGER:
-			localType = 1
-		case pb.Type_LAMBIC:
-			localType = 2
-		case pb.Type_STOUT:
-			localType = 3
-		case pb.Type_CRAFT:
-			localType = 4
-		case pb.Type_GAY:
-			localType = 5
-		default:
-			localType = -1
-		}
-	}
 
-	return s.repo.GetAllBeers(localLimit, localName, localBrand, fromPrice, toPrice, localType, deg, sweet)
+	result, err := s.repo.GetAllBeers(localLimit, localName, localBrand, fromPrice, toPrice, mapToDbType(beerType), deg, sweet)
+	return Map(result, mapFromDb), err
 }
 
 func (s *CatalogService) GetBeer(beerId int64) (*pb.Beer, error) {
-	return s.repo.GetBeer(beerId)
+	result, err := s.repo.GetBeer(beerId)
+	return mapFromDb(result), err
 }
 
 func (s *CatalogService) UpdateBeer(token string, beerId int64, beer *pb.Beer) (*pb.Beer, error) {
@@ -89,7 +69,8 @@ func (s *CatalogService) UpdateBeer(token string, beerId int64, beer *pb.Beer) (
 	if err != nil || !isAdmin {
 		return nil, err
 	}
-	return s.repo.UpdateBeer(beerId, beer)
+	result, err := s.repo.UpdateBeer(beerId, mapToDb(beer))
+	return mapFromDb(result), err
 }
 
 func (s *CatalogService) DeleteBeer(token string, beerId int64) (*pb.Beer, error) {
@@ -97,7 +78,8 @@ func (s *CatalogService) DeleteBeer(token string, beerId int64) (*pb.Beer, error
 	if err != nil || !isAdmin {
 		return nil, err
 	}
-	return s.repo.DeleteBeer(beerId)
+	result, err := s.repo.DeleteBeer(beerId)
+	return mapFromDb(result), err
 }
 
 func (s *CatalogService) isAdmin(token string) (bool, error) {
