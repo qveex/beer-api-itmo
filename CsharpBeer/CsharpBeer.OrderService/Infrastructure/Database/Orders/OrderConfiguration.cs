@@ -11,6 +11,9 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.ToTable("Orders");
         
         builder.HasKey(o => o.OrderId);
+
+        builder.Property(o => o.OrderId)
+            .ValueGeneratedOnAdd();
         
         builder.Property(o => o.UserId)
             .IsRequired();

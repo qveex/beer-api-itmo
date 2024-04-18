@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.auth;
+package auth;
 
 option go_package = "krutov.sso.v1;ssov1";
 
@@ -13,6 +13,7 @@ service Auth {
   // IsAdmin checks whether a user is an admin.
   rpc IsAdmin (IsAdminRequest) returns (IsAdminResponse);
   rpc Logout (LogoutRequest) returns (LogoutResponse);
+  rpc GetUserInfo (GetUserInfoRequest) returns (GetUserInfoResponse);
 }
 
 message IsAdminRequest {
@@ -48,4 +49,13 @@ message LogoutRequest {
 
 message LogoutResponse {
   bool success = 1; // Indicates whether the logout was successful.
+}
+
+message GetUserInfoRequest {
+  string token = 1;
+}
+
+message GetUserInfoResponse {
+  int64 user_id = 1;
+  string email = 2;
 }

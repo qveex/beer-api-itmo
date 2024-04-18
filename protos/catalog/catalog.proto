@@ -1,12 +1,15 @@
 syntax = "proto3";
 
-package api.catalog;
+package api;
 
 import "catalog/get_beers.proto";
 import "catalog/get_beer.proto";
 import "catalog/create_beer.proto";
 import "catalog/update_beer.proto";
 import "catalog/delete_beer.proto";
+import "catalog/set_favorite.proto";
+import "catalog/get_favorites.proto";
+import "catalog/delete_favorite.proto";
 
 option go_package = ".";
 
@@ -16,4 +19,8 @@ service Catalog {
     rpc CreateBeer(CreateBeerRequest) returns (CreateBeerResponse) {}
     rpc UpdateBeer(UpdateBeerRequest) returns (UpdateBeerResponse) {}
     rpc DeleteBeer(DeleteBeerRequest) returns (DeleteBeerResponse) {}
+
+    rpc SetFavorite(SetFavoriteRequest) returns (SetFavoriteResponse) {}
+    rpc GetFavorites(GetFavoritesRequest) returns (GetFavoritesResponse) {}
+    rpc DeleteFavorite(DeleteFavoriteRequest) returns (DeleteFavoriteResponse) {}
 }

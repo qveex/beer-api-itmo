@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Api;
 using Common.Protobuf;
 using CsharpBeer.OrderService.Domain.Orders;
 using Grpc.Core;
@@ -17,17 +18,18 @@ public static class OrderExtensions
         return original;
     }
 
-    public static Order ToDomain(this OrderDto dto) => 
-        Order.Create(orderId: dto.OrderId, userId: dto.UserId, items: dto.Items.ToDomain());
+    public static Order ToDomain(this OrderDto dto)
+    {
+        var order = new Order { OrderId = dto.OrderId, UserId = dto.UserId };
+        order.AddOrderItems(dto.Items.ToDomain(order.OrderId));
+        return order;
+    }
 
     public static IEnumerable<Order> ToDomain(this IEnumerable<OrderDto> dtos) =>
         dtos.Select(d => d.ToDomain());
 
-    public static Order ToDomain(this CreateOrderDto dto) => 
-        Order.Create(-1, userId: dto.UserId, items: dto.Items.ToDomain());
-
-    public static IEnumerable<Order> ToDomain(this IEnumerable<CreateOrderDto> dtos) =>
-        dtos.Select(d => d.ToDomain());
+    public static Order ToDomain(this CreateOrderDto dto, long userId, IEnumerable<Beer> beers) => 
+        Order.Create(userId: userId, items: dto.Items.ToDomain(beers));
 
     public static OrderDto ToDto(this Order order)
     {
@@ -36,7 +38,7 @@ public static class OrderExtensions
             OrderId = order.OrderId,
             UserId = order.UserId,
             Status = order.Status.ToDto(),
-            Total = order.Total.ToString(CultureInfo.InvariantCulture)
+            Total = order.Total
         };
         dto.Items.AddRange(order.Items.ToDto());
         return dto;

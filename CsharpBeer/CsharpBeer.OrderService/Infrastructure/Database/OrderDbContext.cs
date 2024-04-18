@@ -9,7 +9,7 @@ public class OrderDbContext : DbContext, IUnitOfWork
 {
     public OrderDbContext(DbContextOptions options) : base(options)
     {
-        Database.EnsureCreated();
+        Database.Migrate();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ public class OrderDbContext : DbContext, IUnitOfWork
         base.OnModelCreating(modelBuilder);
     }
 
-    public Task CommitChangesAsync() => SaveChangesAsync();
+    public async Task CommitChangesAsync() => await SaveChangesAsync();
 
     public DbSet<Order> Orders { get; set; } = null!;
     public DbSet<OrderItem> OrderItems { get; set; } = null!;

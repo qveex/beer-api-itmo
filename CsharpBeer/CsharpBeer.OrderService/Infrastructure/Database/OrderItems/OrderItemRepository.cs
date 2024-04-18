@@ -77,4 +77,13 @@ public class OrderItemRepository(OrderDbContext context) : IOrderItemRepository
 
         return orderItem;
     }
+
+    public async Task DeleteAllOrderItemsByOrderId(long orderId)
+    {
+        var orderItems = await _context.OrderItems.Where(oi =>  oi.OrderId == orderId).ToListAsync();
+        
+        //TODO result patter to project
+        //if (order is null) return Error.NotFound($"Order with id={id} not found.");
+        _context.OrderItems.RemoveRange(orderItems);
+    }
 }

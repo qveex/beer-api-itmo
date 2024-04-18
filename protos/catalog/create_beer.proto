@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.catalog;
+package api;
 
 import "catalog/beer.proto";
 

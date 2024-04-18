@@ -11,4 +11,5 @@ public interface IOrderItemRepository
     Task<OrderItem> CreateOrder(OrderItem order);
     Task<OrderItem> UpdateOrder(OrderItem order);
     Task DeleteOrderItemById(long orderId, long beerId);
+    Task DeleteAllOrderItemsByOrderId(long orderId);
 }

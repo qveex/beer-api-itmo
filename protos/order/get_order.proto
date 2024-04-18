@@ -5,6 +5,5 @@ package api.order;
 option csharp_namespace = "Common.Protobuf";
 
 message GetOrderRequest {
-  string token = 1;
   int64 orderId = 2;
 }

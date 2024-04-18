@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CsharpBeer.OrderService.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    [Migration("20240413204421_Initial")]
+    [Migration("20240418122005_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -35,8 +35,8 @@ namespace CsharpBeer.OrderService.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Total")
+                        .HasColumnType("double precision");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -54,8 +54,8 @@ namespace CsharpBeer.OrderService.Migrations
                     b.Property<long>("BeerId")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");

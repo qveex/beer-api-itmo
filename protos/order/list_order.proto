@@ -2,12 +2,13 @@
 
 package api.order;
 
+import "google/protobuf/wrappers.proto";
 import "order/order.proto";
 
 option csharp_namespace = "Common.Protobuf";
 
 message ListOrdersRequest {
-  string token = 1;
+  google.protobuf.Int64Value userId = 1;
 }
 
 message ListOrdersResponse {

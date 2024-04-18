@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package api.catalog;
+package api;
 
 option go_package = ".";
 
@@ -8,9 +8,10 @@ message Beer {
   int64 beerId = 1;
   string name = 2;
   string brand = 3;
-  Type type = 4;
-  int32 deg = 5;
-  bool sweet = 6;
+  double price = 4;
+  Type type = 5;
+  int32 deg = 6;
+  bool sweet = 7;
 }
 
 enum Type {

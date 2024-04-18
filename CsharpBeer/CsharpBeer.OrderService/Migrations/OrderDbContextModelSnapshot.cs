@@ -32,8 +32,8 @@ namespace CsharpBeer.OrderService.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("Total")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Total")
+                        .HasColumnType("double precision");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -51,8 +51,8 @@ namespace CsharpBeer.OrderService.Migrations
                     b.Property<long>("BeerId")
                         .HasColumnType("bigint");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");

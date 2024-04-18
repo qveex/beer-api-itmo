@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package api;
+
+option go_package = ".";
+
+message DeleteFavoriteRequest {
+  int64 beerId = 2;
+}
+
+message DeleteFavoriteResponse {}

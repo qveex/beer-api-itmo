@@ -18,7 +18,7 @@ namespace CsharpBeer.OrderService.Migrations
                     OrderId = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    Total = table.Column<decimal>(type: "numeric", nullable: false),
+                    Total = table.Column<double>(type: "double precision", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -33,7 +33,7 @@ namespace CsharpBeer.OrderService.Migrations
                     OrderId = table.Column<long>(type: "bigint", nullable: false),
                     BeerId = table.Column<long>(type: "bigint", nullable: false),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false)
+                    Price = table.Column<double>(type: "double precision", nullable: false)
                 },
                 constraints: table =>
                 {
