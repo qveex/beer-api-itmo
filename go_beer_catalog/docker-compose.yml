@@ -6,12 +6,15 @@ services:
     restart: always
     environment:
       POSTGRES_DB: catalog
-      POSTGRES_USER: qveex
-      POSTGRES_PASSWORD: qveex
+      POSTGRES_USER: /run/secrets/catalog_db_user
+      POSTGRES_PASSWORD: /run/secrets/catalog_db_password
     ports:
       - "5433:5432"
     volumes:
       - catalog_data:/var/lib/postgresql/data
+    secrets:
+      - catalog_db_user
+      - catalog_db_password
 
   catalog:
     build: .
@@ -19,6 +22,22 @@ services:
       - catalog-db
     ports:
       - "8081:8080"
+    environment:
+      DB_USER: /run/secrets/catalog_db_user
+      DB_PASS: /run/secrets/catalog_db_password
+      DB_ADDR: catalog-db
+      DB_PORT: 5432
+      DB_NAME: catalog
+      PORT: 8080
+    secrets:
+      - catalog_db_user
+      - catalog_db_password
+
+secrets:
+  catalog_db_user:
+    environment: CATALOG_DB_USER
+  catalog_db_password:
+    environment: CATALOG_DB_PASSWORD
 
 volumes:
   catalog_data:

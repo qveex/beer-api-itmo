@@ -19,6 +19,8 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         script_stop	: true
         script: |
+          export CATALOG_DB_USER=${{ secrets.CATALOG_DB_USER }}
+          export CATALOG_DB_PASSWORD=${{ secrets.CATALOG_DB_PASSWORD }}
           cd beer-api-itmo/
           git pull
           docker-compose down

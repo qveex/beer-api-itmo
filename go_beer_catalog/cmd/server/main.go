@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 	"log"
 	"main/internal/controller"
@@ -13,11 +12,11 @@ import (
 	"net"
 )
 
-func init() {
+/*func init() {
 	if err := godotenv.Load(".env.example"); err != nil {
 		log.Fatalf("No .env file found: %s", err.Error())
 	}
-}
+}*/
 
 func main() {
 	initDb()
