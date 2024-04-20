@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsharpBeer.OrderService", "CsharpBeer.OrderService\CsharpBeer.OrderService.csproj", "{CE7EF989-4E8C-426B-997C-AA503605B725}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{012DA998-81FD-4D51-AD59-483159A03620}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose.yml = docker-compose.yml
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsharpBeer.Tests", "CsharpBeer.Tests\CsharpBeer.Tests.csproj", "{63A1BE7C-085D-430F-8873-3FDC26ED11C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,5 +15,9 @@ Global
 		{CE7EF989-4E8C-426B-997C-AA503605B725}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE7EF989-4E8C-426B-997C-AA503605B725}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE7EF989-4E8C-426B-997C-AA503605B725}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63A1BE7C-085D-430F-8873-3FDC26ED11C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63A1BE7C-085D-430F-8873-3FDC26ED11C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63A1BE7C-085D-430F-8873-3FDC26ED11C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63A1BE7C-085D-430F-8873-3FDC26ED11C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

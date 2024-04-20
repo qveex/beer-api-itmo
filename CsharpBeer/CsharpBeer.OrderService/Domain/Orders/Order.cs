@@ -26,12 +26,12 @@ public class Order
     public static Order Create(long userId, IEnumerable<OrderItem> items)
     {
         var orderItems = items.ToList();
-        return new Order()
+        var order = new Order()
         {
             UserId = userId,
-            Total = orderItems.Sum(oi => oi.Price * oi.Quantity),
             Status = OrderStatus.Created,
-            _items = orderItems
         };
+        order.AddOrderItems(orderItems);
+        return order;
     }
 }
