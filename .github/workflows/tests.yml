@@ -78,7 +78,7 @@ jobs:
       - name: Run sso
         run: |
           cd sso
-          go run ./cmd/sso --config=config/local_tests.yaml
+          go run ./cmd/sso --config=config/local_tests.yaml &
       - name: Test sso
         run: |
           cd sso
