@@ -6,8 +6,8 @@ services:
     restart: always
     environment:
       POSTGRES_DB: order
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgreS123
+      POSTGRES_USER: ${ORDER_DB_USER}
+      POSTGRES_PASSWORD: ${ORDER_DB_PASSWORD}
     ports:
       - "5434:5434"
     command:
@@ -27,6 +27,8 @@ services:
       - order-db
     ports:
       - "8082:8080"
+    environment:
+      - CUSTOMCONNSTR_Postgres=${CUSTOMCONNSTR_POSTGRES}
     networks:
       - shared_network
 

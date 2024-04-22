@@ -16,17 +16,21 @@ jobs:
       env:
         CATALOG_DB_USER: ${{ secrets.CATALOG_DB_USER }}
         CATALOG_DB_PASSWORD: ${{ secrets.CATALOG_DB_PASSWORD }}
-        CUSTOMCONNSTR_Postgres: ${{ secrets.CUSTOMCONNSTR_Postgres }}
+        CUSTOMCONNSTR_POSTGRES: ${{ secrets.CUSTOMCONNSTR_POSTGRES }}
+        ORDER_DB_USER: ${{ secrets.ORDER_DB_USER }}
+        ORDER_DB_PASSWORD: ${{ secrets.ORDER_DB_PASSWORD }}
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
-        envs: CATALOG_DB_USER, CATALOG_DB_PASSWORD, CUSTOMCONNSTR_Postgres
+        envs: CATALOG_DB_USER,CATALOG_DB_PASSWORD,CUSTOMCONNSTR_POSTGRES,ORDER_DB_USER,ORDER_DB_PASSWORD
         script_stop	: true
         script: |
           export CATALOG_DB_USER=$CATALOG_DB_USER
           export CATALOG_DB_PASSWORD=$CATALOG_DB_PASSWORD
-          export CUSTOMCONNSTR_Postgres=$CUSTOMCONNSTR_Postgres
+          export ORDER_DB_USER=$ORDER_DB_USER
+          export ORDER_DB_PASSWORD=$ORDER_DB_PASSWORD
+          export CUSTOMCONNSTR_Postgres=$CUSTOMCONNSTR_POSTGRES
           cd beer-api-itmo/
           git pull
           docker network ls | grep shared_network || docker network create shared_network
