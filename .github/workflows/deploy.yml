@@ -13,15 +13,21 @@ jobs:
     steps:
     - name: executing remote ssh commands
       uses: appleboy/ssh-action@v1.0.3
+      env:
+        CATALOG_DB_USER: ${{ secrets.CATALOG_DB_USER }}
+        CATALOG_DB_PASSWORD: ${{ secrets.CATALOG_DB_PASSWORD }}
+        CUSTOMCONNSTR_Postgres: ${{ secrets.CUSTOMCONNSTR_Postgres }}
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         password: ${{ secrets.PASSWORD }}
+        envs: CATALOG_DB_USER, CATALOG_DB_PASSWORD, CUSTOMCONNSTR_Postgres
         script_stop	: true
         script: |
-          export CATALOG_DB_USER=${{ secrets.CATALOG_DB_USER }}
-          export CATALOG_DB_PASSWORD=${{ secrets.CATALOG_DB_PASSWORD }}
+          export CATALOG_DB_USER=$CATALOG_DB_USER
+          export CATALOG_DB_PASSWORD=$CATALOG_DB_PASSWORD
+          export CUSTOMCONNSTR_Postgres=$CUSTOMCONNSTR_Postgres
           cd beer-api-itmo/
           git pull
-          docker-compose down
+          docker-compose -f sso/docker-compose.yml -f go_beer_catalog/docker-compose.yml -f CsharpBeer/CsharpBeer.OrderService/docker-compose.yml down
           docker-compose -f sso/docker-compose.yml -f go_beer_catalog/docker-compose.yml -f CsharpBeer/CsharpBeer.OrderService/docker-compose.yml up -d
