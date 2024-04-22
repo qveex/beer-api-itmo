@@ -8,7 +8,7 @@ jobs:
   deploy:
     name: remote ssh connect & build & deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 5
 
     steps:
     - name: executing remote ssh commands
