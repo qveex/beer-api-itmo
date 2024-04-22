@@ -29,5 +29,11 @@ jobs:
           export CUSTOMCONNSTR_Postgres=$CUSTOMCONNSTR_Postgres
           cd beer-api-itmo/
           git pull
-          docker-compose -f sso/docker-compose.yml -f go_beer_catalog/docker-compose.yml -f CsharpBeer/CsharpBeer.OrderService/docker-compose.yml down
-          docker-compose -f sso/docker-compose.yml -f go_beer_catalog/docker-compose.yml -f CsharpBeer/CsharpBeer.OrderService/docker-compose.yml up -d
+          docker network create shared_network
+          docker-compose -f sso/docker-compose.yml -p sso down
+          docker-compose -f go_beer_catalog/docker-compose.yml -p go_beer_catalog down
+          docker-compose -f CsharpBeer/CsharpBeer.OrderService/docker-compose.yml -p order_service down
+          docker-compose -f sso/docker-compose.yml -p sso up -d
+          docker-compose -f go_beer_catalog/docker-compose.yml -p go_beer_catalog up -d
+          docker-compose -f CsharpBeer/CsharpBeer.OrderService/docker-compose.yml -p order_service up -d
+
