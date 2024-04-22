@@ -9,7 +9,11 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgreS123
     ports:
-      - "5434:5432"
+      - "5434:5434"
+    command:
+      - "postgres"
+      - "-c"
+      - "port=5434"
     volumes:
       - order_data:/var/lib/postgresql/data
 
