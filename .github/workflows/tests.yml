@@ -76,6 +76,10 @@ jobs:
           cd sso
           go run ./cmd/migrator --db-url="postgresql://postgres:postgres@localhost:5432/test_auth?sslmode=disable" --migrations-path=./migrations
       - name: Run sso
-        run: go run ./cmd/sso --config=config/local_tests.yaml
+        run: |
+          cd sso
+          go run ./cmd/sso --config=config/local_tests.yaml
       - name: Test sso
-        run: go test ./tests -count=1 -v
+        run: |
+          cd sso
+          go test ./tests -count=1 -v
