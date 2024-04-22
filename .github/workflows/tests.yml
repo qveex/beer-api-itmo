@@ -5,7 +5,7 @@ jobs:
   catalog_tests:
     name: catalog unit tests
     runs-on: ubuntu-latest
-    timeout-minutes: 2
+    timeout-minutes: 5
 
     services:
       postgres:
@@ -36,7 +36,7 @@ jobs:
   order_tests:
       name: order unit tests
       runs-on: ubuntu-latest
-      timeout-minutes: 2
+      timeout-minutes: 5
 
       steps:
       - name: Setup dotnet
@@ -50,3 +50,32 @@ jobs:
           dotnet restore
           dotnet build
           dotnet test
+
+  sso_tests:
+    name: Sso unit tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_auth
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Apply migrations
+        run: |
+          cd sso
+          go run ./cmd/migrator --db-url="postgresql://postgres:postgres@localhost:5432/test_auth?sslmode=disable" --migrations-path=./migrations
+      - name: Run sso
+        run: go run ./cmd/sso --config=config/local_tests.yaml
+      - name: Test sso
+        run: go test ./tests -count=1 -v
