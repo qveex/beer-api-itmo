@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package api.order;
+
+import "catalog/beer.proto"; 
+
+option csharp_namespace = "Common.Protobuf";
+
+message OrderDto {
+    int64 orderId = 1;
+    int64 userId = 2;
+    double total = 3;
+    StatusOrderDto status = 4;
+    repeated OrderItemDto items = 5;
+  }
+  
+  message OrderItemDto {
+    int64 beerId = 1;
+    int64 orderId = 2;
+    int32 quantity = 3;
+    double price = 4;
+    optional api.Beer beer = 5; 
+  }
+  
+  enum StatusOrderDto {
+    NONE = 0;
+    CREATED = 1;
+    PACKAGING = 2;
+    DELIVERING = 3;
+    DELIVERED = 4;
+    CANCELED = 5;
+    DONE = 6;
+  }

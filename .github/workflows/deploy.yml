@@ -1,0 +1,43 @@
+name: deploy
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: remote ssh connect & build & deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+    - name: executing remote ssh commands
+      uses: appleboy/ssh-action@v1.0.3
+      env:
+        CATALOG_DB_USER: ${{ secrets.CATALOG_DB_USER }}
+        CATALOG_DB_PASSWORD: ${{ secrets.CATALOG_DB_PASSWORD }}
+        CUSTOMCONNSTR_POSTGRES: ${{ secrets.CUSTOMCONNSTR_POSTGRES }}
+        ORDER_DB_USER: ${{ secrets.ORDER_DB_USER }}
+        ORDER_DB_PASSWORD: ${{ secrets.ORDER_DB_PASSWORD }}
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        envs: CATALOG_DB_USER,CATALOG_DB_PASSWORD,CUSTOMCONNSTR_POSTGRES,ORDER_DB_USER,ORDER_DB_PASSWORD
+        script_stop	: true
+        script: |
+          export CATALOG_DB_USER=$CATALOG_DB_USER
+          export CATALOG_DB_PASSWORD=$CATALOG_DB_PASSWORD
+          export ORDER_DB_USER=$ORDER_DB_USER
+          export ORDER_DB_PASSWORD=$ORDER_DB_PASSWORD
+          export CUSTOMCONNSTR_Postgres=$CUSTOMCONNSTR_POSTGRES
+          cd beer-api-itmo/
+          git pull
+          docker network ls | grep shared_network || docker network create shared_network
+          docker-compose -f sso/docker-compose.yml -p sso down
+          docker-compose -f go_beer_catalog/docker-compose.yml -p go_beer_catalog down
+          docker-compose -f CsharpBeer/CsharpBeer.OrderService/docker-compose.yml -p order_service down
+          docker-compose -f sso/docker-compose.yml -p sso up -d
+          docker-compose -f go_beer_catalog/docker-compose.yml -p go_beer_catalog up -d
+          docker-compose -f CsharpBeer/CsharpBeer.OrderService/docker-compose.yml -p order_service up -d
+

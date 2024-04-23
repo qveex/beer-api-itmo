@@ -1,0 +1,16 @@
+﻿syntax = "proto3";
+
+package api.order;
+
+import "google/protobuf/wrappers.proto";
+import "order/order.proto";
+
+option csharp_namespace = "Common.Protobuf";
+
+message ListOrdersRequest {
+  google.protobuf.Int64Value userId = 1;
+}
+
+message ListOrdersResponse {
+  repeated OrderDto orders = 1;
+}

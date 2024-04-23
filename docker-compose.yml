@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  auth-db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_DB=auth
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5432:5432"
+    volumes:
+      - auth_data:/var/lib/postgresql/data
+
+  catalog-db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_DB=catalog
+      - POSTGRES_USER=qveex
+      - POSTGRES_PASSWORD=qveex
+    ports:
+      - "5433:5432"
+    volumes:
+      - catalog_data:/var/lib/postgresql/data
+
+  order-db:
+    image: postgres:latest
+    restart: always
+    environment:
+      - POSTGRES_DB=order
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgreS123
+    ports:
+      - "5434:5432"
+    volumes:
+      - order_data:/var/lib/postgresql/data
+
+  sso:
+    build: sso
+    depends_on:
+      - auth-db
+    ports:
+      - "44044:44044"
+  
+  catalog:
+    build: go_beer_catalog
+    depends_on:
+      - catalog-db
+    ports:
+      - "8081:8080"
+  
+  order:
+    build:
+      context: .
+      dockerfile: CsharpBeer/CsharpBeer.OrderService/Dockerfile
+    depends_on:
+      - order-db
+    ports:
+      - "8082:8080"
+
+volumes:
+  auth_data:
+  catalog_data:
+  order_data:

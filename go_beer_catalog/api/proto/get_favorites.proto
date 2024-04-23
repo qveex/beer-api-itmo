@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package api;
+
+import "beer.proto";
+
+option go_package = ".";
+
+message GetFavoritesRequest {}
+
+message GetFavoritesResponse {
+  repeated Beer beers = 1;
+}

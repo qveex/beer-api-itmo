@@ -2,8 +2,14 @@ syntax = "proto3";
 
 package api;
 
-//import "get_beer.proto";
-//import "beer.proto";
+import "get_beers.proto";
+import "get_beer.proto";
+import "create_beer.proto";
+import "update_beer.proto";
+import "delete_beer.proto";
+import "set_favorite.proto";
+import "get_favorites.proto";
+import "delete_favorite.proto";
 
 option go_package = ".";
 
@@ -13,85 +19,8 @@ service Catalog {
     rpc CreateBeer(CreateBeerRequest) returns (CreateBeerResponse) {}
     rpc UpdateBeer(UpdateBeerRequest) returns (UpdateBeerResponse) {}
     rpc DeleteBeer(DeleteBeerRequest) returns (DeleteBeerResponse) {}
+
+    rpc SetFavorite(SetFavoriteRequest) returns (SetFavoriteResponse) {}
+    rpc GetFavorites(GetFavoritesRequest) returns (GetFavoritesResponse) {}
+    rpc DeleteFavorite(DeleteFavoriteRequest) returns (DeleteFavoriteResponse) {}
 }
-
-/**************** GET BEERS *******************/
-message GetBeersRequest {
-    optional int32 limit = 1;
-    optional string brand = 2;
-    optional Type type = 3;
-    optional int32 deg = 4;
-    optional bool sweet = 5;
-}
-
-message GetBeersResponse {
-    repeated Beer beers = 1;
-}
-/**************** GET BEERS *******************/
-
-
-
-
-
-/**************** GET BEER *******************/
-message GetBeerRequest {
-    int64 beerId = 1;
-}
-
-message GetBeerResponse {
-    optional Beer beer = 1;
-}
-/**************** GET BEER *******************/
-
-
-/**************** CREATE BEER *******************/
-message CreateBeerRequest {
-    Beer beer = 1;
-}
-
-message CreateBeerResponse {}
-/**************** CREATE BEER *******************/
-
-
-
-
-/**************** UPDATE BEER *******************/
-message UpdateBeerRequest {
-    int64 beerId = 1;
-    Beer beer = 2;
-}
-
-message UpdateBeerResponse {}
-/**************** UPDATE BEER *******************/
-
-
-
-/**************** DELETE BEER *******************/
-message DeleteBeerRequest {
-    int64 beerId = 1;
-}
-
-message DeleteBeerResponse {}
-/**************** UPDATE BEER *******************/
-
-
-
-/**************** BEER *******************/
-message Beer {
-    int64 beerId = 1;
-    string name = 2;
-    string brand = 3;
-    Type type = 4;
-    int32 deg = 5;
-    bool sweet = 6;
-}
-
-enum Type {
-    ALE = 0;
-    LAGER = 1;
-    LAMBIC = 2;
-    STOUT = 3;
-    CRAFT = 4;
-    GAY = 5;
-}
-/**************** BEER *******************/

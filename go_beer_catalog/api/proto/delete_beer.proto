@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package api;
+
+import "beer.proto";
+
+option go_package = ".";
+
+message DeleteBeerRequest {
+  int64 beerId = 1;
+}
+
+message DeleteBeerResponse {
+  Beer beer = 1;
+}

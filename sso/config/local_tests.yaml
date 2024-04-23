@@ -1,0 +1,5 @@
+env: "local"
+db_url: "postgresql://postgres:postgres@localhost:5432/test_auth?sslmode=disable"
+grpc:
+  port: 44044
+  timeout: 10h

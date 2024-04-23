@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package api;
+
+import "beer.proto";
+
+option go_package = ".";
+
+message UpdateBeerRequest {
+  int64 beerId = 1;
+  Beer beer = 2;
+}
+
+message UpdateBeerResponse {
+  Beer beer = 1;
+}

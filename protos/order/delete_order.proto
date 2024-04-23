@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+
+package api.order;
+
+option csharp_namespace = "Common.Protobuf";
+
+message DeleteOrderRequest {
+  int64 orderId = 2;
+}

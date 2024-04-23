@@ -1,8 +1,10 @@
 syntax = "proto3";
 
-package get_beer;
+package api;
 
-import "api/proto/beer.proto";
+import "beer.proto";
+
+option go_package = ".";
 
 message GetBeerRequest {
   int64 beerId = 1;

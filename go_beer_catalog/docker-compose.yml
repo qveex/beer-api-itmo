@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  catalog-db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: catalog
+      POSTGRES_USER: ${CATALOG_DB_USER}
+      POSTGRES_PASSWORD: ${CATALOG_DB_PASSWORD}
+    ports:
+      - "5433:5433"
+    command:
+      - "postgres"
+      - "-c"
+      - "port=5433"
+    volumes:
+      - catalog_data:/var/lib/postgresql/data
+    networks:
+      - shared_network
+
+  catalog:
+    build: .
+    depends_on:
+      - catalog-db
+    ports:
+      - "8081:8080"
+    networks:
+      - shared_network
+    environment:
+      DB_USER: ${CATALOG_DB_USER}
+      DB_PASS: ${CATALOG_DB_PASSWORD}
+      DB_ADDR: catalog-db
+      DB_PORT: 5433
+      DB_NAME: catalog
+      PORT: 8080
+
+volumes:
+  catalog_data:
+
+networks:
+  shared_network:
+    external: true
