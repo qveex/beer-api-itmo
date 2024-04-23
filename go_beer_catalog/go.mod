@@ -4,7 +4,7 @@ go 1.22.2
 
 require (
 	github.com/Krutov777/protos v1.0.3
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.0
 	github.com/lib/pq v1.10.9
 	google.golang.org/grpc v1.63.0
 	google.golang.org/protobuf v1.33.0

@@ -2,6 +2,7 @@ package controller
 
 import (
 	"context"
+	grpcauth "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
 	pb "main/pkg/api"
 )
 
@@ -28,7 +29,7 @@ func (s *Server) GetBeer(ctx context.Context, req *pb.GetBeerRequest) (*pb.GetBe
 
 // CreateBeer ...
 func (s *Server) CreateBeer(ctx context.Context, req *pb.CreateBeerRequest) (*pb.CreateBeerResponse, error) {
-	token, err := getToken(ctx)
+	token, err := grpcauth.AuthFromMD(ctx, "bearer")
 	if err != nil {
 		return nil, err
 	}
@@ -38,7 +39,7 @@ func (s *Server) CreateBeer(ctx context.Context, req *pb.CreateBeerRequest) (*pb
 
 // UpdateBeer ...
 func (s *Server) UpdateBeer(ctx context.Context, req *pb.UpdateBeerRequest) (*pb.UpdateBeerResponse, error) {
-	token, err := getToken(ctx)
+	token, err := grpcauth.AuthFromMD(ctx, "bearer")
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +49,7 @@ func (s *Server) UpdateBeer(ctx context.Context, req *pb.UpdateBeerRequest) (*pb
 
 // DeleteBeer ...
 func (s *Server) DeleteBeer(ctx context.Context, req *pb.DeleteBeerRequest) (*pb.DeleteBeerResponse, error) {
-	token, err := getToken(ctx)
+	token, err := grpcauth.AuthFromMD(ctx, "bearer")
 	if err != nil {
 		return nil, err
 	}

@@ -2,14 +2,16 @@ package main
 
 import (
 	"fmt"
-	"google.golang.org/grpc"
-	"log"
 	"main/internal/controller"
 	"main/internal/env"
 	pr "main/internal/pkg/di"
 	"main/internal/repository"
 	pb "main/pkg/api"
 	"net"
+)
+
+const (
+	serverPort = "PORT"
 )
 
 /*func init() {
@@ -24,15 +26,14 @@ func main() {
 }
 
 func initServer() {
-
-	port := fmt.Sprintf(":%s", env.GetEnv(serverPort, "8080"))
-	s := grpc.NewServer()
-
+	log := pr.Provider.GetLogger()
+	server := pr.Provider.GetCatalogServer()
 	catalogService := pr.Provider.GetCatalogService()
 	favoriteService := pr.Provider.GetFavoriteService()
 
+	port := fmt.Sprintf(":%s", env.GetEnv(serverPort, "8080"))
 	pb.RegisterCatalogServer(
-		s,
+		server,
 		&controller.Server{
 			CatalogService:  catalogService,
 			FavoriteService: favoriteService,
@@ -40,12 +41,12 @@ func initServer() {
 	)
 	l, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err.Error())
 	}
 
-	log.Printf("Listening on port %s", port)
-	if err := s.Serve(l); err != nil {
-		log.Fatal(err)
+	log.Debug("Listening on port " + port)
+	if err := server.Serve(l); err != nil {
+		log.Error(err.Error())
 	}
 }
 
@@ -56,7 +57,3 @@ func initDb() {
 		panic(err)
 	}
 }
-
-const (
-	serverPort = "PORT"
-)

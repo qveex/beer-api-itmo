@@ -2,12 +2,13 @@ package controller
 
 import (
 	"context"
+	grpcauth "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/auth"
 	pb "main/pkg/api"
 )
 
 // SetFavorite ...
 func (s *Server) SetFavorite(ctx context.Context, req *pb.SetFavoriteRequest) (*pb.SetFavoriteResponse, error) {
-	token, err := getToken(ctx)
+	token, err := grpcauth.AuthFromMD(ctx, "bearer")
 	if err != nil {
 		return nil, err
 	}
@@ -17,7 +18,7 @@ func (s *Server) SetFavorite(ctx context.Context, req *pb.SetFavoriteRequest) (*
 
 // GetFavorites ...
 func (s *Server) GetFavorites(ctx context.Context, req *pb.GetFavoritesRequest) (*pb.GetFavoritesResponse, error) {
-	token, err := getToken(ctx)
+	token, err := grpcauth.AuthFromMD(ctx, "bearer")
 	if err != nil {
 		return nil, err
 	}
@@ -26,7 +27,7 @@ func (s *Server) GetFavorites(ctx context.Context, req *pb.GetFavoritesRequest) 
 }
 
 func (s *Server) DeleteFavorite(ctx context.Context, req *pb.DeleteFavoriteRequest) (*pb.DeleteFavoriteResponse, error) {
-	token, err := getToken(ctx)
+	token, err := grpcauth.AuthFromMD(ctx, "bearer")
 	if err != nil {
 		return nil, err
 	}
