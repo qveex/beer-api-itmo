@@ -4,7 +4,7 @@
 # Тема проекта - магазин пива 🍺
 ## [Предварительное ТЗ в Notion](https://flicker-jobaria-33d.notion.site/3Heads-5024c35e69bd4e5abc06d9f3c93e3713?pvs=74)
 
-## Команда: [@qveex](https://github.com/xincas), [@xincas](https://github.com/qveex), [@Krutov777](https://github.com/Krutov777)
+## Команда: [@qveex](https://github.com/qveex), [@xincas](https://github.com/xincas), [@Krutov777](https://github.com/Krutov777)
 
 ### В проекте используется
 - Go
@@ -25,7 +25,7 @@
 - `GetUserInfo`
 > [proto](https://github.com/Krutov777/protos/blob/main/proto/sso/sso.proto)
 
-### Каталог [@qveex](https://github.com/xincas)
+### Каталог [@qveex](https://github.com/qveex)
 - `GetBeers`
 - `GetBeer`
 - `CreateBeer`
